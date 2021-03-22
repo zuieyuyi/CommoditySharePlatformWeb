@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>model</title>
+</head>
+
+<div th:replace="~{/commons/head::cssfile}"></div>
+<body style="background-image: url(../img/indexbg.jpg);" th:style="background-image: url(@{/static/img/indexbg.jpg});">
+    <div id="bgbox" >
+        <!-- 顶部栏 -->
+        <div th:replace="~{/commons/head::head}"></div>
+        <!-- 主体 -->
+        <div id="bodybox">
+            <!-- 导航区 -->
+            <div id="leftbox">
+                <div class="lefttitle">
+                    <span>热门商品排行</span>
+                </div>
+                <div class="hotrank">
+                    <div class="item one">
+                        <div class="rank"><span>1</span></div>
+                        <div class="imgbox"><img src="../img/dongman2.png" /></div>
+                        <div class="itemname"><span>xx</span></div>
+                    </div>
+                    <div class="item two">
+                        <div class="rank"><span>2</span></div>
+                        <div class="imgbox"><img src="../img/dongman3.jpg" /></div>
+                        <div class="itemname"><span>xx</span></div>
+                    </div>
+                    <div class="item three">
+                        <div class="rank"><span>3</span></div>
+                        <div class="imgbox"><img src="../img/dongman6.png" /></div>
+                        <div class="itemname"><span>xx</span></div>
+                    </div>
+                    <div class="item">
+                        <div class="rank"><span>4</span></div>
+                        <div class="imgbox"><img src="../img/game3.jpeg" /></div>
+                        <div class="itemname"><span>xx</span></div>
+                    </div>
+                    <div class="item">
+                        <div class="rank"><span>5</span></div>
+                        <div class="imgbox"><img src="../img/game5.jpeg" /></div>
+                        <div class="itemname"><span>xx</span></div>
+                    </div>
+                    <div class="item">
+                        <div class="rank"><span>6</span></div>
+                        <div class="imgbox"><img src="../img/music2.jpg" /></div>
+                        <div class="itemname"><span>xx</span></div>
+                    </div>
+                    <div class="item">
+                        <div class="rank"><span>7</span></div>
+                        <div class="imgbox"><img src="../img/music5.jpg" /></div>
+                        <div class="itemname"><span>xx</span></div>
+                    </div>
+                    <div class="item">
+                        <div class="rank"><span>8</span></div>
+                        <div class="imgbox"><img src="../img/live3.jpg" /></div>
+                        <div class="itemname"><span>xx</span></div>
+                    </div>
+                    <div class="item">
+                        <div class="rank"><span>9</span></div>
+                        <div class="imgbox"><img src="../img/live2.jpg" /></div>
+                        <div class="itemname"><span>xx</span></div>
+                    </div>
+                    <div class="item">
+                        <div class="rank"><span>10</span></div>
+                        <div class="imgbox"><img src="../img/dongman1.jpg" /></div>
+                        <div class="itemname"><span>xx</span></div>
+                    </div>
+                </div>
+                <div class="lefttitle">
+                    <span>精品商品推荐</span>
+                </div>
+                <div class="hotrank finebox">
+                    <div class="item one">
+                        <div class="rank"><span>1</span></div>
+                        <div class="imgbox"><img src="../img/live4.jpg" /></div>
+                        <div class="itemname"><span>xx</span></div>
+                    </div>
+                    <div class="item two">
+                        <div class="rank"><span>2</span></div>
+                        <div class="imgbox"><img src="../img/live1.jpg" /></div>
+                        <div class="itemname"><span>xx</span></div>
+                    </div>
+                    <div class="item three">
+                        <div class="rank"><span>3</span></div>
+                        <div class="imgbox"><img src="../img/game2.jpg" /></div>
+                        <div class="itemname"><span>xx</span></div>
+                    </div>
+                    <div class="item">
+                        <div class="rank"><span>4</span></div>
+                        <div class="imgbox"><img src="../img/game1.jpg" /></div>
+                        <div class="itemname"><span>xx</span></div>
+                    </div>
+                    <div class="item">
+                        <div class="rank"><span>5</span></div>
+                        <div class="imgbox"><img src="../img/music1.jpg" /></div>
+                        <div class="itemname"><span>xx</span></div>
+                    </div>
+                    <div class="item">
+                        <div class="rank"><span>6</span></div>
+                        <div class="imgbox"><img src="../img/game4.jpg" /></div>
+                        <div class="itemname"><span>xx</span></div>
+                    </div>
+                    <div class="item">
+                        <div class="rank"><span>7</span></div>
+                        <div class="imgbox"><img src="../img/music5.jpg" /></div>
+                        <div class="itemname"><span>xx</span></div>
+                    </div>
+                </div>
+            </div>
+            <!-- 商品展示区 -->
+            <div id="rightbox">
+                <div id="innertitle">商品名</div>
+                <div id="innerbody">
+                    <div>
+                        <div><img src="../img/game_detail.png" /></div>
+                        <div id="commodityMsg">
+                            <div>
+                                <span>商品状态</span>
+                                <span>商品状态</span>
+                            </div>
+                            <div>
+                                <span>商品数量</span>
+                                <span>商品数量</span>
+                            </div>
+                            <div>
+                                <span>商品质量</span>
+                                <span>商品质量</span>
+                            </div>
+                            <div>
+                                <span>商品类型标签</span>
+                                <span>商品类型标签</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 评论区 -->
+                <div id="communicationbox">
+                    <div id="talkbox" >
+                        <div id="talktext">
+                            <textarea placeholder="请文明用语" ></textarea>
+                        </div>
+                        <div id="talkbut">
+                            <input type="button"  value="发送">
+                        </div>
+                    </div>
+                    <div class="speakbox">
+                        <div class="headimg">
+                            <img src="../img/user.jpeg" /><br>
+                            <span>user1</span>
+                        </div>
+                        <div class="speek">
+                            <span>6666666666666666666666666666666</span>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="speakbox">
+                        <div class="headimg">
+                            <img src="../img/user.jpeg" /><br>
+                            <span>user1</span>
+                        </div>
+                        <div class="speek">
+                            <span>6666666666666666666666666666666</span>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="speakbox">
+                        <div class="headimg">
+                            <img src="../img/user.jpeg" /><br>
+                            <span>user1</span>
+                        </div>
+                        <div class="speek">
+                            <span>6666666666666666666666666666666</span>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="speakbox">
+                        <div class="headimg">
+                            <img src="../img/user.jpeg" /><br>
+                            <span>user1</span>
+                        </div>
+                        <div class="speek">
+                            <span>6666666666666666666666666666666</span>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="speakbox">
+                        <div class="headimg">
+                            <img src="../img/user.jpeg" /><br>
+                            <span>user1</span>
+                        </div>
+                        <div class="speek">
+                            <span>6666666666666666666666666666666</span>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="speakbox">
+                        <div class="headimg">
+                            <img src="../img/user.jpeg" /><br>
+                            <span>user1</span>
+                        </div>
+                        <div class="speek">
+                            <span>6666666666666666666666666666666</span>
+                        </div>
+                    </div>
+                    <hr>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    
+</body>
+</html>

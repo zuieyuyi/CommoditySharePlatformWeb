@@ -1,0 +1,215 @@
+#topbox{
+    width: 100%;
+    height: 100px;
+    display: flex;
+    background-color: rgba(0,0,0,0.2);
+    /* text-align: center; */
+}
+#topbox>div:first-child{
+    /* border: 1px solid blue; */
+    flex: 1;
+}
+#topbox>div:first-child>p{
+    margin-top: 10px;
+    margin-left: 30px;
+    font-size: 50px;
+    font-weight: bolder;
+    font-family: "maiandra gd";
+	text-shadow: 0 0 0.2em #ffffff,
+                -0 -0 0.2em #ffffff; 
+
+}
+
+#atagbox{
+    /* border: 1px solid blue; */
+    flex:2;
+    display: flex;
+    align-items: center;
+    padding-left: 400px;
+    /* justify-items: right; */
+    /* width: 400px;
+    position: relative;
+    left: 40%; */
+}
+
+.ainner{
+    width: 100px;
+    height: 100%;
+    padding-top: 35px;
+    /* text-align: center; */
+    /* border: 1px solid red; */
+}
+
+#bigbox{
+    width: 1200px;
+	height: 100%;
+	background-color: rgba(0,0,0,0.2);
+	margin: 0px auto;
+	/* text-align: center; */
+}
+#bigbox>div{
+    position: relative;
+    top:5%;
+}
+
+/* 对于超链接处理 */
+#atagbox>div>a{
+    font-size: 20px;
+    /* font-family: "maiandra gd"; */
+    color: black;
+    text-decoration: none;
+    margin-left: 20px;
+}
+#atagbox>div>a:hover{
+    color: red;
+
+}
+/* #indextaga{
+    border-bottom: 5px solid rgba(0, 128, 0, 0.5);
+} */
+
+/* 对于登录框的处理 */
+#loginbox{
+    margin-right: 200px;
+    position: absolute;
+    top: 25px;
+    left: 1550px;
+    float: right;
+}
+#loginbox>div>img{
+    width: 50px;
+}
+#loginbox>div{
+    margin-left: 10px;
+    display: inline-block;
+    vertical-align: middle;
+}
+span>div>a{
+    font-size: 20px;
+    font-family: "maiandra gd";
+    color: black;
+    text-decoration: none;
+}
+
+/* 对于主体的处理 */
+#bigbox div{
+    border-radius: 5px;
+}
+.sortmain{
+    margin-left: 100px;
+    margin-bottom: 30px;
+    width: 85%;
+    height: 170px;
+    background-color: rgba(255, 255, 255, 0.5);
+    box-shadow: 2px 2px rgba(0,0,0,0.3);
+}
+.sortmaintitle{
+    width: 100%;
+    height: 30px;
+    padding: 5px;
+    background-color: gray;
+}
+.sortmaintitle>a{
+    text-decoration: none;
+    color:black;
+}
+.sortmaintitle>a:hover{
+    color:red;
+}
+.sortmaintitle>a:first-child{
+    float: left;
+}
+.sortmaintitle>a:last-child{
+    float: right;
+}
+.info{
+    display: flex;
+    margin-top: 10px;
+    justify-content: space-around;
+}
+.info>div{
+    text-align: center;
+}
+.info>div>a>img{
+    width: 150px;
+    height: 100px;
+}
+.info>div>a{
+    color: black;
+    text-decoration: none;
+}
+.info>div>a:hover{
+    color: red;
+}
+
+
+/* 对于固定悬浮菜单处理 */
+#tagmeunbox div,#tagmeunbox{
+    border-radius: 5px;
+}
+#tagmeunbox{
+    width: 300px;
+    height: 750px;
+    position: fixed;
+    top: 150px;
+    left: 1600px;
+    background-color: rgba(0,0,0,0.6);
+}
+#tagmeunbox>div:first-child{
+    width: 100%;
+    height: 20px;
+    background-color: red;
+    color: white;
+    text-align: center;
+}
+.sort{
+    width: 250px;
+    height: 150px;
+    margin-top: 20px;
+    position: relative;
+    left: 25px;
+    background-color: rgba(255, 255, 255, 0.4);
+}
+.sort>div:first-child{
+    width: 100%;
+    color: white;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+.sort>div:last-child{
+    display: flex;
+    flex-wrap: wrap;
+}
+.sort>div:last-child>a{
+    text-decoration: none;
+    margin: 10px;
+    color: black;
+    border-radius: 5px;
+}
+.sort>div:last-child>a:hover{
+    color: white;
+}
+.onea{
+    background-color: #428bca;
+}
+.twoa{
+    background-color: #f0ad4e;
+}
+.threea{
+    background-color: #d9534f;
+}
+.foura{
+    background-color: #5cb85c;
+}
+.fivea{
+    background-color: #B37333;
+}
+.sixa{
+    background-color: #B433FF;
+}
+.sevena{
+    background-color: #428bca;
+}
+.eighta{
+    background-color: #5cb85c;
+}

@@ -1,0 +1,48 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+/*注册表单元素设置*/
+#registerbox{
+    width: 450px;
+    height: 500px;
+    padding-top: 20px;
+    position: relative;
+    left: 30%;
+    border-radius: 50px;
+    box-shadow: 0 0 20px #ffffff;
+}
+
+#registerbox p{
+    font-weight: bolder;
+    font-size: 15px;
+    text-shadow: 0 0 0.2em #ffffff,
+                -0 -0 0.2em #ffffff; 
+}
+#registerbox>form input,#down{
+    border: 1px solid skyblue;
+	width: 300px;
+	height: 40px;
+	margin-bottom: 20px;
+	border-radius: 10px;
+	outline: none;
+}
+
+input[type='submit']{
+    margin-top: 20px;
+    background-color: violet;
+    font-size: 15px;
+    color: white;
+}
+form>span{
+    font-weight: bolder;
+}
+
+/*背景图标设置*/
+#email{
+    background-image: url(../img/email.jpg);
+	background-repeat:  no-repeat;
+	background-size: 40px;
+	background-position-x: right;
+}

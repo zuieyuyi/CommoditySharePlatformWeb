@@ -1,0 +1,89 @@
+*{
+	margin: 0px;
+	padding: 0px;
+	box-sizing: border-box;
+}
+body{
+	background-repeat: no-repeat;
+	background-size: 1920px;
+	background-attachment: fixed;
+}
+#bgbox{
+	width: 1920px;
+	height: 1000px;
+}
+#big{
+	width: 1200px;
+	height: 1000px;
+	background-color: rgba(0,0,0,0.2);
+	margin: 0px auto;
+	text-align: center;
+	
+}
+#big>div{
+	position: relative; 
+	top: 15%; 
+}
+#title{
+	font-size: 30px;
+	font-weight: bolder;
+	color: #FF69B4;
+	font-family: "maiandra gd";
+}
+#title h2{
+	line-height: 200px;
+	text-shadow: 0 0 0.2em #ffffff,
+                -0 -0 0.2em #ffffff; 
+}
+#regis{
+	margin-top: 20px;
+	font-size: 20px;
+	font-weight: bolder;
+	font-family: "felix titling";
+}
+#regis>a{
+	text-decoration: none;
+	color: gold;
+}
+#regis>a:focus{
+	color: seagreen;
+}
+
+#messagebox{
+	width: 650px;
+	height: 300px;
+	position: relative;
+	border-radius: 20px;
+	left: 23%;
+	box-shadow: 0 0 20px #ffffff;
+	padding-top: 25px;
+}
+/* 表单元素 */
+#forminfo>input{
+	border: 1px solid skyblue;
+	width: 300px;
+	height: 40px;
+	margin-top: 20px;
+	border-radius: 10px;
+	outline: none;
+}
+#forminfo input[type="submit"]{
+	background-color: #FF69B4;
+	font-size: 20px;
+	color: white;
+}
+#user{
+	background-image: url(../img/usertag.jpg);
+	background-repeat:  no-repeat;
+	background-size: 40px;
+	background-position-x: right;
+}
+#pwd,#repwd{
+	background-image: url(../img/password.jpg);
+	background-repeat:  no-repeat;
+	background-size: 40px 40px;
+	background-position-x: right;
+}
+
+
+

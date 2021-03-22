@@ -1,0 +1,37 @@
+@font-face {
+    font-family:ONYX;
+    src: url(../font/ONYX.TTF);
+}
+@font-face {
+    font-family:TCCM____;
+    src: url(../font/TCCM____.TTF);
+}
+@font-face {
+    font-family:ROCK;
+    src: url(../font/ROCK.TTF);
+}
+@font-face {
+    font-family:BOOMBOX;
+    src: url(../font/BOOMBOX.TTF);
+}
+@font-face {
+    font-family:LTCH;
+    src: url(../font/LTCH.TTF);
+}
+@font-face {
+    font-family:FZJZJW;
+    src: url(../font/FZJZJW.TTF);
+}
+@font-face{
+    font-family: SnowtopCaps;
+    src:url(../font/SnowtopCaps.otf) format("opentype");
+}
+.ainner>a{
+    font-family: FZJZJW;
+}
+.info>div>a{
+    font-family: FZJZJW;
+}
+.navtitle{
+    font-family: FZJZJW;
+}

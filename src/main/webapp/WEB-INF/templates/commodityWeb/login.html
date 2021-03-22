@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="utf-8">
+		<title>login</title>
+	</head>
+	<div th:replace="~{/commons/head::cssfile}"></div>
+
+	<body style="background-image: url(../img/indexbg.jpg);" th:style="background-image: url(@{/static/img/indexbg.jpg});">
+		<div id="bgbox" >
+			<div id="big">
+				<div id="title">
+					<h2>商品共享平台</h2>
+				</div>
+				<div id="messagebox">
+					<div id="forminfo">
+						<input id="user" class="usermes" type="text" placeholder="Username or E-mail"><br />
+						<input id="pwd" class="usermes" type="password" placeholder="Password"><br />
+						<input type="submit" value="login">
+					</div>
+					<div id="regis">
+						<a href="">register</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

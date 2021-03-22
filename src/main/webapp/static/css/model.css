@@ -1,0 +1,194 @@
+/*model主体*/
+#bodybox{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    padding: 10px;
+    /* border: 1px solid red; */
+}
+#bodybox>div{
+    margin: 10px;
+    background-color: rgba(0,0,0,0.2);
+}
+
+/* 导航区 */
+#leftbox{
+    /* border: 1px solid yellow; */
+    padding: 10px;
+    flex: 1;
+}
+#leftbox>div{
+    margin-bottom: 20px;
+}
+.lefttitle{
+    width: 100%;
+    height: 50px;
+    padding: 10px;
+    text-align: center;
+    /* border: 1px solid green; */
+    font-weight: bolder;
+    border-radius: 5px;
+    box-shadow: 0 0 20px red;
+    background-color: rgba(255, 255, 255, 0.4);
+}
+.hotrank{
+    width: 100%;
+    /*height: 1000px;*/
+    padding: 10px;
+    /* border: 1px solid blue; */
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.4);
+}
+.finebox{
+    height: 700px;
+}
+.item{
+    width: 100%;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    padding: 5px;
+    height: 80px;
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    box-shadow: 2px 2px rgba(0,0,0,0.3);
+}
+.item img{
+    width: 100px;
+    height: 60px;
+}
+.rank{
+    font-size: 30px;
+    flex:1;
+    padding-left: 20px;
+}
+.imgbox{
+    flex: 2;
+}
+.itemname{
+    flex: 2;
+}
+.one{
+    background-color: rgba(135, 206, 235, 0.5);
+}
+.one div:first-child>span{
+    color: gold;
+}
+.two{
+    background-color: rgba(135, 206, 235, 0.5);
+}
+.two div:first-child>span{
+    color: rgba(102, 102, 102, 0.9);
+}
+.three{
+    background-color: rgba(135, 206, 235, 0.5);
+}
+.three div:first-child>span{
+    color: brown;
+}
+/* 视频区 */
+#rightbox{
+    /* border: 1px solid blue; */
+    padding: 10px;
+    flex: 3;
+}
+#rightbox>div{
+    margin-bottom: 20px;
+}
+#innertitle{
+    width: 100%;
+    height: 50px;
+    text-align: center;
+    font-size: 20px;
+    padding: 10px;
+    font-weight: bolder;
+    /* border: 1px solid pink; */
+}
+#innerbody{
+    width: 100%;
+    height: 700px;
+    /* border: 1px solid green; */
+    text-align: center;
+}
+#innerbody>video{
+    height: 100%;
+}
+#detailbox{
+    width: 100%;
+    height: 100px;
+    /* border: 1px solid black; */
+    padding-right: 60px;
+    display: flex;
+}
+#detailimg{
+    height: 100%;
+    /* background-color: red; */
+    flex: 1;
+}
+#detailtext{
+    height: 100%;
+    /* background-color: green; */
+    flex: 3;
+}
+#detailbox div:first-child>img{
+    margin-left: 60px;
+    height: 100%;
+}
+#communicationbox{
+    width: 100%;
+    height: 1000px;
+    padding: 10px;
+    /* border: 1px solid purple; */
+    background-color: rgba(255, 255, 255, 0.3);
+}
+#talkbox{
+    width: 100%;
+    height: 200px;
+    /* border: 1px solid green; */
+    display: flex;
+    padding:0 60px 0 60px ;
+}
+#talktext{
+    /* background-color: green; */
+    /* border-radius: 20px; */
+    flex: 3;
+}
+#talkbut{
+    /* border: 1px solid black; */
+    text-align: center;
+    /* background-color: red; */
+    flex: 1;
+}
+input[type=button]{
+    height: 40px;
+    width: 60px;
+    margin-top: 20px;
+}
+
+#talkbox div:first-child>textarea{
+    height: 100px;
+    width: 100%;
+    
+    resize: none;
+}
+.speakbox{
+    width: 100%;
+    height: 100px;
+    margin-top: 20px;
+    /* border: 1px solid blue; */
+    display: flex;
+}
+.headimg{
+    height: 100%;
+    /* background-color: green; */
+    text-align: center;
+    flex: 1;
+}
+.headimg>img{
+    height: 70%;
+}
+.speek{
+    /* background-color: red; */
+    padding:10px;
+    flex: 5;
+}

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<div th:fragment="cssfile">
+    <link rel="stylesheet" href="../css/font.css" th:href="@{/static/css/font.css}" type="text/css"/>
+    <link rel="stylesheet" href="../css/register.css" th:href="@{/static/css/register.css}" type="text/css"/>
+    <link rel="stylesheet" href="../css/index.css" th:href="@{/static/css/index.css}" type="text/css"/>
+    <link rel="stylesheet" href="../css/login.css" th:href="@{/static/css/login.css}" type="text/css"/>
+    <link rel="stylesheet" href="../css/mypage.css" th:href="@{/static/css/mypage.css}" type="text/css"/>
+    <link rel="stylesheet" href="../css/commodityMsg.css" th:href="@{/static.css/commodityMsg.css}" type="text/css"/>
+</div>
+<body>
+<!-- 顶部栏 -->
+<div id="topbox" th:fragment="head">
+    <div>
+        <p>商品共享平台</p>
+    </div>
+    <div id="atagbox">
+        <div id="indextaga" class="ainner">
+            <a href="#">&nbsp;首页</a>
+        </div>
+        <div class="ainner">
+            <a href="#">&nbsp;xx</a>
+        </div>
+        <div class="ainner">
+            <a href="#">&nbsp;xx</a>
+        </div>
+        <div class="ainner">
+            <a href="#">&nbsp;xx</a>
+        </div>
+        <div class="ainner">
+            <a href="#">&nbsp;xx</a>
+        </div>
+        <div id="loginbox">
+            <div><img src="../img/user.jpeg" th:src="@{/static/img/user.jpeg}"></div>
+            <div><a href="#">customer</a></div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

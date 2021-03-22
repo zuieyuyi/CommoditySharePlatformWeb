@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>my config page</title>
+</head>
+<div th:replace="~{/commons/head::cssfile}"></div>
+<body style="background-image: url(../img/indexbg.jpg);" th:style="background-image: url(@{/static/img/indexbg.jpg});">
+    <div id="bgbox">
+        <!-- 顶部栏 -->
+        <div th:replace="~{/commons/head::head}"></div>
+        <!-- 快捷导航栏 -->
+        <div id="navbox">
+            <div class="navtitle">
+                <h3>快捷导航栏</h3>
+            </div>
+            <div class="navmian">
+                <div class="abox">
+                    <a href="#" >一、修改个人信息</a>
+                </div>
+                <div class="abox">
+                    <a href="#" >二、查看我的订单</a>
+                </div>
+                <div class="abox">
+                    <a href="#" >三、查看我的商品</a>
+                </div>
+            </div>
+            <div class="navtitle">
+                <h3>快捷栏</h3>
+            </div>
+            <div class="navmian">
+                <div class="abox">
+                    <a href="#" >返回主页</a>
+                </div>
+                <div class="abox">
+                    <a href="#" >登出</a>
+                </div>
+            </div>
+        </div>
+        <!-- 我的主页 -->
+        <div id="mymainbox">
+            <div id="maininner">
+                <form action="">
+                    <div id="myconfig" class="maintitle">
+                        <h3>一、个人设置</h3>
+                    </div>
+                    <div id="mytablebox">
+                        <table>
+                            <tr>
+                                <td>用户名:</td>
+                                <td>
+                                    <input type="text" value="customer"/>
+                                </td>
+                                <td>
+                                    <input type="button" value="aa"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>名字:</td>
+                                <td>
+                                    <input type="text" />
+                                </td>
+                                <td>
+                                    <input type="button" value="aa"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>姓氏:</td>
+                                <td>
+                                    <input type="text" />
+                                </td>
+                                <td>
+                                    <input type="button" value="aa"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>昵称:</td>
+                                <td>
+                                    <input type="text" value="customer"/>
+                                </td>
+                                <td>
+                                    <input type="button" value="aa"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
