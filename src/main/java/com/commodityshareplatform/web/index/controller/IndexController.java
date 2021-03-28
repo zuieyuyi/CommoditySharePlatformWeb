@@ -10,4 +10,14 @@ public class IndexController {
     public String index(){
         return "index";
     }
+
+    @RequestMapping(value = "to_login",method = RequestMethod.GET)
+    public String to_login(){
+        return "commodityWeb/login";
+    }
+
+    @RequestMapping(value = "to_register",method = RequestMethod.GET)
+    public String to_register(){
+        return "commodityWeb/register";
+    }
 }

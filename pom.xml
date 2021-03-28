@@ -294,6 +294,20 @@
       <artifactId>shiro-all</artifactId>
       <version>${shiro.version}</version>
     </dependency>
+
+    <!-- shiro整合包 -->
+    <!-- shiro-thymeleaf 2.0.0-->
+    <dependency>
+      <groupId>com.github.theborakompanioni</groupId>
+      <artifactId>thymeleaf-extras-shiro</artifactId>
+      <version>1.2.1</version>
+    </dependency>
+    <!-- shiro-redis -->
+    <dependency>
+      <groupId>org.crazycake</groupId>
+      <artifactId>shiro-redis</artifactId>
+      <version>3.1.0</version>
+    </dependency>
   </dependencies>
 
   <!-- 使用profile配置项目 -->

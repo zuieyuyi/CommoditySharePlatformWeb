@@ -56,27 +56,27 @@
 
     <!-- mybatis配置 -->
 
+<!--     配置扫描器，将mybatis接口的实现加到ioc容器中 -->
+<!--     配置和mybatis的整合 -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!-- 指定mybatis全局配置的文件的位置 -->
+        <property name="configLocation" value="classpath:mybatis.xml"></property>
+        <property name="dataSource" ref="dataSource"></property>
+        <!-- 指定mapper文件的位置 -->
+        <property name="mapperLocations" value="classpath:mapper/*/*.xml"></property>
+    </bean>
+
+    <!-- 配置一个可以批量操作的sqlSession -->
+    <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory"/>
+        <constructor-arg name="executorType" value="BATCH"/>
+    </bean>
+
     <!-- 配置扫描器，将mybatis接口的实现加到ioc容器中 -->
-    <!-- 配置和mybatis的整合 -->
-<!--    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">-->
-<!--        &lt;!&ndash; 指定mybatis全局配置的文件的位置 &ndash;&gt;-->
-<!--        <property name="configLocation" value="classpath:mybatis.xml"></property>-->
-<!--        <property name="dataSource" ref="dataSource"></property>-->
-<!--        &lt;!&ndash; 指定mapper文件的位置 &ndash;&gt;-->
-<!--        <property name="mapperLocations" value="classpath:mapper/*.xml"></property>-->
-<!--    </bean>-->
-
-<!--    &lt;!&ndash; 配置一个可以批量操作的sqlSession &ndash;&gt;-->
-<!--    <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">-->
-<!--        <constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory"/>-->
-<!--        <constructor-arg name="executorType" value="BATCH"/>-->
-<!--    </bean>-->
-
-<!--    &lt;!&ndash; 配置扫描器，将mybatis接口的实现加到ioc容器中 &ndash;&gt;-->
-<!--    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">-->
-<!--        &lt;!&ndash; 扫描所有dao接口的实现加入到ioc容器中 &ndash;&gt;-->
-<!--        <property name="basePackage" value="com.commodityshareplatform.web.*.dao"></property>-->
-<!--    </bean>-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <!-- 扫描所有dao接口的实现加入到ioc容器中 -->
+        <property name="basePackage" value="com.commodityshareplatform.web.*.dao"></property>
+    </bean>
 
     <!-- 事务控制的配置 -->
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
@@ -86,7 +86,7 @@
 
     <!-- shiro配置 -->
     <!-- 1、配置SecurityManage -->
-    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager" >
+<!--    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager" >-->
         <!-- 配置缓存管理器 -->
         <!--        <property name="cacheManager" ref="cacheManager"></property>-->
         <!-- 认证授权 -->
@@ -99,7 +99,7 @@
             </list>
         </property>
         -->
-    </bean>
+<!--    </bean>-->
     <!--
     配置 CacheManager.
     需要加入 ehcache 的 jar 包及配置文件.
@@ -129,26 +129,26 @@
     <!--
     配置 LifecycleBeanPostProcessor. 可以自定的来调用配置在 Spring IOC 容器中 shiro bean 的生命周期方法.
     -->
-    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+<!--    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>-->
     <!--
     启用 IOC 容器中使用 shiro 的注解. 但必须在配置了 LifecycleBeanPostProcessor 之后才可以使用.
     -->
-    <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"
-          depends-on="lifecycleBeanPostProcessor"/>
-    <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
-        <property name="securityManager" ref="securityManager"/>
-    </bean>
+<!--    <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"-->
+<!--          depends-on="lifecycleBeanPostProcessor"/>-->
+<!--    <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">-->
+<!--        <property name="securityManager" ref="securityManager"/>-->
+<!--    </bean>-->
 
     <!--
     配置 ShiroFilter.
     id 必须和 web.xml 文件中配置的 DelegatingFilterProxy 的 <filter-name> 一致.
                       若不一致, 则会抛出: NoSuchBeanDefinitionException. 因为 Shiro 会来 IOC 容器中查找和 <filter-name> 名字对应的 filter bean.
     -->
-    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
-        <property name="securityManager" ref="securityManager"/>
-        <property name="loginUrl" value="/to_login"/>
-        <property name="successUrl" value="/list"/>
-        <property name="unauthorizedUrl" value="/unauthorized"/>
+<!--    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">-->
+<!--        <property name="securityManager" ref="securityManager"/>-->
+<!--        <property name="loginUrl" value="/to_login"/>-->
+<!--        <property name="successUrl" value="/list"/>-->
+<!--        <property name="unauthorizedUrl" value="/unauthorized"/>-->
         <!--
             配置哪些页面需要受保护.
             以及访问这些页面需要的权限.
@@ -168,5 +168,5 @@
                        /** = authc
                    </value>
                </property>-->
-    </bean>
+<!--    </bean>-->
 </beans>

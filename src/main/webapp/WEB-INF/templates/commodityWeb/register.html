@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
+<head th:insert="~{/commons/head::cssfile}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>register</title>
 </head>
-<div th:replace="~{/commons/head::cssfile}"></div>
-<body style="background-image: url(../img/indexbg.jpg);" th:style="background-image: url(@{/static/img/indexbg.jpg});">
+
+<body style="background-image: url('/CommoditySharePlatformWeb_war/static/img/indexbg.jpg');" >
     <div id="bgbox" >
         <div id="big">
             <div id="title">
@@ -15,18 +15,15 @@
             <div id="registerbox">
                 <form action="" method="">
                     <p>用户名</p>
-                    <input id="user" type="text" placeholder="username"><br>
+                    <input id="user" type="text" placeholder="用户名"><br>
                     <p>电子邮箱</p>
-                    <input id="email" type="email" placeholder="email"><br>
+                    <input id="email" type="email" placeholder="电子邮箱"><br>
                     <p>密码</p>
-                    <input id="pwd" type="password" placeholder="password"><br>
+                    <input id="pwd" type="password" placeholder="密码"><br>
                     <p>重复密码</p>
-                    <input id="repwd" type="password" placeholder="password again"><br>
+                    <input id="repwd" type="password" placeholder="重复密码"><br>
 
                     <input type="submit" value="注       册"><br>
-                    
-                    <input style="width: 15px;height: 15px;" type="checkbox" value="true">
-                    <span>同意用户许可条款</span>
                 </form>
             </div>
         </div>

@@ -3,10 +3,11 @@
 	<head>
 		<meta charset="utf-8">
 		<title>login</title>
+		<div th:replace="~{/commons/head::cssfile}"></div>
 	</head>
-	<div th:replace="~{/commons/head::cssfile}"></div>
 
-	<body style="background-image: url(../img/indexbg.jpg);" th:style="background-image: url(@{/static/img/indexbg.jpg});">
+
+	<body style="background-image: url('/CommoditySharePlatformWeb_war/static/img/indexbg.jpg');" >
 		<div id="bgbox" >
 			<div id="big">
 				<div id="title">
@@ -14,15 +15,23 @@
 				</div>
 				<div id="messagebox">
 					<div id="forminfo">
-						<input id="user" class="usermes" type="text" placeholder="Username or E-mail"><br />
-						<input id="pwd" class="usermes" type="password" placeholder="Password"><br />
-						<input type="submit" value="login">
+						<input id="user" class="username" type="text" placeholder="用户名"><br />
+						<input id="pwd" class="password" type="password" placeholder="密码"><br />
+						<input type="submit" value="登录">
 					</div>
 					<div id="regis">
-						<a href="">register</a>
+						<a href="" th:href="@{/to_register}">注册账号</a>
 					</div>
 				</div>
 			</div>
 		</div>
 	</body>
+
+	<script th:inline="javascript">
+		/*<![CDATA[*/
+		//项目地址
+		var PROJECT_PATH = [[${#httpServletRequest.getContextPath()}]];
+
+		/*]]>*/
+	</script>
 </html>

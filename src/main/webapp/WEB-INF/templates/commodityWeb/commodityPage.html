@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
+<head th:insert="~{/commons/head::cssfile}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>model</title>
+    <title>commodityPage</title>
 </head>
 
-<div th:replace="~{/commons/head::cssfile}"></div>
-<body style="background-image: url(../img/indexbg.jpg);" th:style="background-image: url(@{/static/img/indexbg.jpg});">
+<body style="background-image: url('/CommoditySharePlatformWeb_war/static/img/indexbg.jpg');" >
     <div id="bgbox" >
         <!-- 顶部栏 -->
         <div th:replace="~{/commons/head::head}"></div>
