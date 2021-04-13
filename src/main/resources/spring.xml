@@ -22,7 +22,7 @@
        若要切换数据库环境则需改动数据库配置文件
      -->
     <context:property-placeholder location="classpath:/dev/jdbc.properties"></context:property-placeholder>
-
+    <context:property-placeholder location="classpath:/dev/config.properties"></context:property-placeholder>
     <!--数据库连接池配置 -->
     <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
           destroy-method="close" lazy-init="false">
@@ -63,7 +63,7 @@
         <property name="configLocation" value="classpath:mybatis.xml"></property>
         <property name="dataSource" ref="dataSource"></property>
         <!-- 指定mapper文件的位置 -->
-        <property name="mapperLocations" value="classpath:mapper/*/*.xml"></property>
+        <property name="mapperLocations" value="classpath:mapper/**/*.xml"></property>
     </bean>
 
     <!-- 配置一个可以批量操作的sqlSession -->
@@ -75,7 +75,7 @@
     <!-- 配置扫描器，将mybatis接口的实现加到ioc容器中 -->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <!-- 扫描所有dao接口的实现加入到ioc容器中 -->
-        <property name="basePackage" value="com.commodityshareplatform.web.*.dao"></property>
+        <property name="basePackage" value="com.commodityshareplatform.web.*.dao"/>
     </bean>
 
     <!-- 事务控制的配置 -->

@@ -1,6 +1,7 @@
 package com.commodityshareplatform.web.order.server.impl;
 
 import com.commodityshareplatform.web.commodity.bean.Commodity;
+import com.commodityshareplatform.web.commodity.bean.CommodityExample;
 import com.commodityshareplatform.web.commodity.dao.CommodityMapper;
 import com.commodityshareplatform.web.enuminfo.OrderStatusEnum;
 import com.commodityshareplatform.web.order.bean.Order;
@@ -29,9 +30,10 @@ public class OrderService implements IOrderService {
 
     @Override
     public List<Order> selectAllOrders() {
+        CommodityExample commodityExample = new CommodityExample();
         List<Order> orders = orderMapper.selectAllOrder();
         List<User> users = userMapper.selectAllUsers();
-        List<Commodity> commodities = commodityMapper.selectAllCommodities();
+        List<Commodity> commodities = commodityMapper.selectAllCommodities(commodityExample);
 
         for (Order order:orders){
             //确定订单状态信息

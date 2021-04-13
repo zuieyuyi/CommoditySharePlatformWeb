@@ -9,10 +9,13 @@ import com.commodityshareplatform.web.user.bean.User;
 import com.commodityshareplatform.web.user.bean.UserExample;
 import com.commodityshareplatform.web.user.dao.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.Date;
 import java.util.List;
@@ -25,13 +28,16 @@ public class CommodityService implements ICommodityService {
     @Autowired
     UserMapper userMapper;
 
+//    @Value("${commodity.imgSrc}")
+//    private String ImgSrc;
+
     @Override
-    public List<Commodity> selectAllCommodities() {
+    public List<Commodity> selectAllCommodities(CommodityExample example) {
 //        CommodityExample commodityExample = new CommodityExample();
 //        CommodityExample.Criteria criteria = commodityExample.createCriteria();
 //        criteria.andIsValidEqualTo(1);
 //        List<Commodity> commodities = commodityMapper.selectByExample(null);
-        List<Commodity> commodities = commodityMapper.selectAllCommodities();
+        List<Commodity> commodities = commodityMapper.selectAllCommodities(example);
 
         List<User> users = userMapper.selectByExample(null);
 
@@ -48,6 +54,10 @@ public class CommodityService implements ICommodityService {
                 commodity.setCommodityUserName("无用户");
                 continue;
             }
+
+//            if(commodity.getCommodityImgSrc() == null){
+//                commodity.setCommodityImgSrc(ImgSrc);
+//            }
             //获取用户名
             for (User user:users) {
                 if (commodity.getCommodityUserId().equals(user.getUserId())) {
@@ -62,6 +72,7 @@ public class CommodityService implements ICommodityService {
                 }
             }
         }
+
         return commodities;
     }
 
@@ -160,6 +171,7 @@ public class CommodityService implements ICommodityService {
         return result;
     }
 
+    @Override
     public String getCommodityTags(Integer commodityId){
         Commodity commodity = selectCommodityById(commodityId);
         String commodityTags = commodity.getCommodityTag();

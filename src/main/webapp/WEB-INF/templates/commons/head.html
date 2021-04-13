@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="../css/login.css" th:href="@{/static/css/login.css}" type="text/css"/>
     <link rel="stylesheet" href="../css/mypage.css" th:href="@{/static/css/mypage.css}" type="text/css"/>
     <link rel="stylesheet" href="../css/commodityMsg.css" th:href="@{/static/css/commodityMsg.css}" type="text/css"/>
+    <link rel="stylesheet" href="../css/showpage.css" th:href="@{/static/css/showpage.css}" type="text/css"/>
     <script src="vendor/jquery/jquery.min.js" th:src="@{/webjars/jquery/3.5.1/jquery.js}"></script>
 </div>
 <body>
@@ -21,10 +22,10 @@
     </div>
     <div id="atagbox">
         <div id="indextaga" class="ainner">
-            <a href="#">&nbsp;首页</a>
+            <a href="/index" th:href="@{/index}">&nbsp;首页</a>
         </div>
         <div class="ainner">
-            <a href="#">&nbsp;xx</a>
+            <a href="#" th:href="@{/to_showpage}">&nbsp;索引</a>
         </div>
         <div class="ainner">
             <a href="#">&nbsp;xx</a>

@@ -58,6 +58,7 @@
           </trim>
         </if>
       </foreach>
+      and IS_VALID = 1
     </where>
   </sql>
   <sql id="Update_By_Example_Where_Clause">
@@ -457,6 +458,14 @@
   </update>
 
   <select id="selectAllCommodities" resultMap="BaseResultMap">
-    select * from t_commodity WHERE IS_VALID = 1
+    select * from t_commodity
+    <include refid="Example_Where_Clause"></include>
+    <!--where>
+        <if test="commodityTag != null">
+          COMMODITY_TAG like '%'+#{commodityTag}+'%'
+        </if>
+    and IS_VALID = 1
+    </where-->
+    order by commodity_create_date desc
   </select>
 </mapper>

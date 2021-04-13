@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:insert="~{/commons/head::cssfile}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>register</title>
+</head>
+<body style="background-image: url('/CommoditySharePlatformWeb_war/static/img/indexbg.jpg');" >
+<div id="bgbox">
+    <!-- 顶部栏 -->
+    <!-- 顶部栏 -->
+    <div th:replace="~{/commons/head::head}"></div>
+    <span>&nbsp;</span>
+    <div><br></div>
+    <!-- 主体 -->
+    <div id="showpage">
+        <!-- 导航栏 -->
+        <div id="shownav">
+            <div class="navtag" id="typeDiv">
+                <div>类型:</div>
+                <div><span title="全部" class="clickIn" style="color: #00a1d6">全部</span></div>
+                <div><span title="动漫">生活便利</span></div>
+                <div><span title="游戏">服装装扮</span></div>
+                <div><span title="音乐">娱乐休闲</span></div>
+                <div><span title="生活">电子设备</span></div>
+            </div>
+            <div class="navtag" id="yearsDiv">
+                <div>&nbsp;年:</div>
+                <div><span id="allYear" href="" class="clickIn"  title="全部" style="color: #00a1d6">全部</span></div>
+            </div>
+            <div class="navtag" id="monthDiv">
+                <div>&nbsp;月:</div>
+                <div><span title="全部" class="clickIn" style="color: #00a1d6">全部</span></div>
+                <div><span title="1月">1月</span></div>
+                <div><span title="2月">2月</span></div>
+                <div><span title="3月">3月</span></div>
+                <div><span title="4月">4月</span></div>
+                <div><span title="5月">5月</span></div>
+                <div><span title="6月">6月</span></div>
+                <div><span title="7月">7月</span></div>
+                <div><span title="8月">8月</span></div>
+                <div><span title="9月">9月</span></div>
+                <div><span title="10月">10月</span></div>
+                <div><span title="11月">11月</span></div>
+                <div><span title="12月">12月</span></div>
+            </div>
+        </div>
+        <!-- 显示栏 -->
+        <div id="showmain">
+            
+        </div>
+        <!-- 页码 -->
+        <div id="cutpage">
+
+        </div>
+    </div>
+</div>
+
+</body>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    //项目地址
+    var PROJECT_PATH = [[${#httpServletRequest.getContextPath()}]];
+
+    $(document).ready(function(){
+        //时间索引生成
+        buildYearElm()
+        //索引点击
+        clickIndex("#typeDiv");
+        clickIndex("#yearsDiv");
+        clickIndex("#monthDiv");
+        //
+        $("#monthDiv").hide();
+
+        //获取
+        toPage(1);
+    });
+
+    //时间标签生成
+    function buildYearElm(){
+        var date = new Date();
+        var year = date.getFullYear();
+
+        var yearDiv = $("#yearsDiv");
+
+        for (var i = 0 ;i < 8 ; i++){
+            //<div><a href="" title="2021">2021</a></div>
+            yearDiv.append("<div><span title='" + (year-i) + "'>" + (year-i) + "</span></div>");
+        }
+    }
+    //索引点击事件
+    function clickIndex(id){
+        var divElms = $(id+" span");
+        divElms.click(function (){
+            divElms.removeAttr("style").removeClass("clickIn");
+            this.style.color = "#00a1d6";
+            $(this).addClass("clickIn");
+            //获取全部变色的标签
+            var clickIn = $(".clickIn");
+            var tag = clickIn[0].innerText == "全部"?"":clickIn[0].innerText;
+            var year = clickIn[1].innerText == "全部"?"":clickIn[1].innerText;
+            var month = "";
+            if(clickIn[2] != undefined && clickIn[2] != null){
+                month = clickIn[2].innerText == "全部"?"":clickIn[2].innerText.replace("月","");
+            }
+
+            toPage(1,tag,year,month);
+        });
+        $("#allYear").click(function(){
+            $("#monthDiv").hide();
+            $("#monthDiv span").removeAttr("style").removeClass("clickIn");
+        });
+        if (id == "#yearsDiv"){
+            divElms.click(function(){
+                $("#monthDiv").show();
+            });
+        }
+    }
+
+    //获取商品列表
+    function toPage(pn,tag,year,month){
+        $.ajax({
+            url : PROJECT_PATH + "/commodity/commodities",
+            dataType : "json",
+            type : "get",
+            sync : false,
+            data : {"pn":pn,"ps":"12","commodityStatus":100,"commodityTag":tag,"year":year,"month":month},
+            success : function(data){
+                if(data.code == 10000){
+                    //生成结果数据
+                    buildSearchResult(data.data.list);
+                    //生成页面下标
+                    buildPage(data.data);
+                }else{
+                    alert(data.msg);
+                }
+            }
+
+        });
+    }
+
+    //生成结果数据
+    function buildSearchResult(result){
+        var showmain = $("#showmain");
+        //清空列表信息
+        showmain.empty();
+        $.each(result,function(index,rs){
+            showmain.append("<div class='showinner'>" +
+                "<a href=''>" +
+                "<img src='" + rs.commodityImgSrc + "' ><br>" +
+                "<span>" + rs.commodityName + "</span>" +
+                "</a></div>");
+        });
+    }
+
+    //生成页面下标
+    function buildPage(pageInfo){
+        //列表信息已经清空过了
+        var cutpage = $("#cutpage");
+        cutpage.empty();
+        //首页
+        var firstPage = $("<a><div>&nbsp;首页&nbsp;</div></a>");
+        //上一页
+        var prePage = $("<a><div>&nbsp;&lt;&lt;&nbsp;</div></a>");
+        if (pageInfo.hasPreviousPage == false) {
+            prePage.addClass("disabled");
+        } else {
+            //点击翻页
+            prePage.click(function () {
+                //翻页动作
+                toPage(pageInfo.pageNum - 1)
+            });
+            //点击回首页
+            firstPage.click(function () {
+                toPage(1);
+            });
+        }
+        cutpage.append(firstPage).append(prePage);
+        //中间页
+        $.each(pageInfo.navigatepageNums, function (index, item) {
+            var numPage = $("<a><div>&nbsp;" + item + "&nbsp;</div></a>");
+
+            if (pageInfo.pageNum == item) {
+                numPage.attr("style","background-color: rgba(0, 255, 0,0.5);border: 1px solid greenyellow;");
+            } else {
+                //点击发送ajax请求获取数据
+                numPage.click(function () {
+                    toPage(item);
+                });
+            }
+            cutpage.append(numPage);
+        });
+
+        //下一页
+        var nextPage = $("<a><div>&nbsp;&gt;&gt;&nbsp;</div></a>");
+        //末页
+        var lastPage = $("<a><div>&nbsp;末页&nbsp;</div></a>");
+        //下页及末页页动作
+        if (pageInfo.hasNextPage == false) {
+            nextPage.addClass("disabled");
+        } else {
+            //点击翻页
+            nextPage.click(function () {
+                toPage(pageInfo.pageNum + 1)
+            });
+            //点击回末页
+            lastPage.click(function () {
+                toPage(pageInfo.pages);
+            });
+        }
+        cutpage.append(nextPage).append(lastPage);
+    }
+
+
+    /*]]>*/
+</script>
+
+</html>

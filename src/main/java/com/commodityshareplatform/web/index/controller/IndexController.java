@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class IndexController {
     @RequestMapping(value = "index",method = RequestMethod.GET)
     public String index(){
-        return "index";
+        return "commodityWeb/index";
     }
 
     @RequestMapping(value = "to_login",method = RequestMethod.GET)
@@ -19,5 +19,10 @@ public class IndexController {
     @RequestMapping(value = "to_register",method = RequestMethod.GET)
     public String to_register(){
         return "commodityWeb/register";
+    }
+
+    @RequestMapping(value = "to_showpage",method = RequestMethod.GET)
+    public String to_showpage(){
+        return "commodityWeb/showpage";
     }
 }

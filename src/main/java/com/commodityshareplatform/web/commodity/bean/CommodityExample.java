@@ -323,12 +323,12 @@ public class CommodityExample {
         }
 
         public Criteria andCommodityNameLike(String value) {
-            addCriterion("COMMODITY_NAME like", value, "commodityName");
+            addCriterion("COMMODITY_NAME like", "%" + value + "%", "commodityName");
             return (Criteria) this;
         }
 
         public Criteria andCommodityNameNotLike(String value) {
-            addCriterion("COMMODITY_NAME not like", value, "commodityName");
+            addCriterion("COMMODITY_NAME not like", "%" + value + "%", "commodityName");
             return (Criteria) this;
         }
 
@@ -573,12 +573,12 @@ public class CommodityExample {
         }
 
         public Criteria andCommodityImgSrcLike(String value) {
-            addCriterion("COMMODITY_IMG_SRC like", value, "commodityImgSrc");
+            addCriterion("COMMODITY_IMG_SRC like", "%" + value + "%", "commodityImgSrc");
             return (Criteria) this;
         }
 
         public Criteria andCommodityImgSrcNotLike(String value) {
-            addCriterion("COMMODITY_IMG_SRC not like", value, "commodityImgSrc");
+            addCriterion("COMMODITY_IMG_SRC not like", "%" + value + "%", "commodityImgSrc");
             return (Criteria) this;
         }
 
@@ -643,12 +643,12 @@ public class CommodityExample {
         }
 
         public Criteria andCommodityTagLike(String value) {
-            addCriterion("COMMODITY_TAG like", value, "commodityTag");
+            addCriterion("COMMODITY_TAG like", "%" + value + "%", "commodityTag");
             return (Criteria) this;
         }
 
         public Criteria andCommodityTagNotLike(String value) {
-            addCriterion("COMMODITY_TAG not like", value, "commodityTag");
+            addCriterion("COMMODITY_TAG not like", "%" + value + "%", "commodityTag");
             return (Criteria) this;
         }
 
@@ -713,12 +713,12 @@ public class CommodityExample {
         }
 
         public Criteria andCommodityQualityLike(String value) {
-            addCriterion("COMMODITY_QUALITY like", value, "commodityQuality");
+            addCriterion("COMMODITY_QUALITY like", "%" + value + "%", "commodityQuality");
             return (Criteria) this;
         }
 
         public Criteria andCommodityQualityNotLike(String value) {
-            addCriterion("COMMODITY_QUALITY not like", value, "commodityQuality");
+            addCriterion("COMMODITY_QUALITY not like", "%" + value + "%", "commodityQuality");
             return (Criteria) this;
         }
 

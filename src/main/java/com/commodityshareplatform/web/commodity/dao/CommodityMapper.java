@@ -120,5 +120,5 @@ public interface CommodityMapper {
      */
     int updateByPrimaryKey(Commodity record);
 
-    List<Commodity> selectAllCommodities();
+    List<Commodity> selectAllCommodities(CommodityExample example);
 }

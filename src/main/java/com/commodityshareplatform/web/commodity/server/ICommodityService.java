@@ -1,11 +1,12 @@
 package com.commodityshareplatform.web.commodity.server;
 
 import com.commodityshareplatform.web.commodity.bean.Commodity;
+import com.commodityshareplatform.web.commodity.bean.CommodityExample;
 
 import java.util.List;
 
 public interface ICommodityService {
-    public List<Commodity> selectAllCommodities();
+    public List<Commodity> selectAllCommodities(CommodityExample ex);
 
     public Commodity selectCommodityById(Integer id);
 
