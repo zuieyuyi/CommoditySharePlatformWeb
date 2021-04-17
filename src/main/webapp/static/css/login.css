@@ -72,6 +72,12 @@ body{
 	font-size: 20px;
 	color: white;
 }
+
+#forminfo input[type="button"]{
+	background-color: #FF69B4;
+	font-size: 20px;
+	color: white;
+}
 #user{
 	background-image: url(../img/usertag.jpg);
 	background-repeat:  no-repeat;

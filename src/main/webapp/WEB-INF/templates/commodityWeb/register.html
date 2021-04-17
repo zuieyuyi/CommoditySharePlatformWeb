@@ -15,18 +15,125 @@
             <div id="registerbox">
                 <form action="" method="">
                     <p>用户名</p>
-                    <input id="user" type="text" placeholder="用户名"><br>
+                    <input id="user" type="text" name="userName" placeholder="用户名"><br>
                     <p>电子邮箱</p>
-                    <input id="email" type="email" placeholder="电子邮箱"><br>
+                    <input id="email" type="email" name="email" placeholder="电子邮箱"><br>
                     <p>密码</p>
-                    <input id="pwd" type="password" placeholder="密码"><br>
+                    <input id="pwd" type="password" name="password" placeholder="密码"><br>
                     <p>重复密码</p>
                     <input id="repwd" type="password" placeholder="重复密码"><br>
 
-                    <input type="submit" value="注       册"><br>
+                    <input type="button" style="background-color: #FF69B4;font-size: 20px;color: white;" class="pinkColor" onclick="reg()" value="注       册"><br>
                 </form>
             </div>
         </div>
     </div>
 </body>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    //项目地址
+    var PROJECT_PATH = [[${#httpServletRequest.getContextPath()}]];
+
+    //注册
+    function reg() {
+        var userName = $("#user").val();
+        var email = $("#email").val();
+        var password = $("#pwd").val();
+        if(validate()){
+            $.ajax({
+                type: "get",//方法类型
+                dataType: "json",//预期服务器返回的数据类型
+                url: PROJECT_PATH + "/user/users" ,
+                async: false,
+                data: {"userName": userName},
+                success: function (data) {
+                    if(data.code == 10000){
+                        if (data.data.length != 0){
+                            alert("用户名重复了");
+                        }else{
+                            $.ajax({
+                                type: "post",//方法类型
+                                dataType: "json",//预期服务器返回的数据类型
+                                url: PROJECT_PATH + "/register" ,
+                                async: false,
+                                data: {"userName":userName,"email":email,"userPw":password},
+                                success: function (data) {
+                                    if(data.code == 10000){
+                                        alert("注册成功");
+                                        window.location.href = PROJECT_PATH + "/to_login";
+                                    }else{
+                                        alert(data.msg);
+                                    }
+                                }
+                            });
+                        }
+                    }else{
+                        alert(data.msg);
+                    }
+                }
+            });
+        }
+    }
+
+    //数据校验
+    function validate(){
+        var user = $("#user").val();
+        var email = $("#email").val();
+        var pwd = $("#pwd").val();
+        var repwd = $("#repwd").val();
+        //用户名校验
+        if (valiDateLength(user,3,10)){
+            alert("用户名长度应在3-10之间");
+            return false;
+        }
+        //邮箱校验
+        if (email == null || email == undefined || email ==""){
+            alert("邮箱为空");
+            return false;
+        }
+        if (validateEmail(email)){
+            alert("不符合邮箱格式");
+            return false;
+        }
+
+        //密码复杂度校验和长度校验
+        if (pwd == null || pwd == undefined || pwd ==""){
+            alert("密码为空");
+            return false;
+        }
+        if (validateStr(pwd) && valiDateLength(pwd,6,20)){
+            alert("密码必须包含数字字母并且长度为6-20");
+            return false;
+        }
+        //密码重复验证
+        if (pwd != repwd){
+            alert("两次密码输入不一致，请确认！");
+        }
+        return true;
+    }
+
+    /**
+     * 重名验证
+     */
+    // function reName(name){
+    //     $.ajax({
+    //         type: "get",//方法类型
+    //         dataType: "json",//预期服务器返回的数据类型
+    //         url: PROJECT_PATH + "/user/users" ,
+    //         async: false,
+    //         data: {"userName": name},
+    //         success: function (data) {
+    //             if(data.code == 10000){
+    //                 if (data.data[0] == undefined || data.data[0] == null || data.data[0] == ""){
+    //                     alert("重名了");
+    //                 }
+    //             }else{
+    //                 alert(data.msg);
+    //             }
+    //         }
+    //     });
+    // }
+
+    /*]]>*/
+</script>
 </html>

@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>commodityPage</title>
 </head>
+<style>
+    #bgbox{
+        height: auto;
+    }
+</style>
 
 <body style="background-image: url('/CommoditySharePlatformWeb_war/static/img/indexbg.jpg');" >
     <div id="bgbox" >
@@ -112,40 +117,28 @@
             </div>
             <!-- 商品展示区 -->
             <div id="rightbox">
-                <div id="innertitle">商品名</div>
+                <div id="innertitle"></div>
                 <div id="innerbody">
                     <div>
-                        <div><img src="../img/game_detail.png" /></div>
-                        <div id="commodityMsg">
-                            <div>
-                                <span>商品状态</span>
-                                <span>商品状态</span>
-                            </div>
-                            <div>
-                                <span>商品数量</span>
-                                <span>商品数量</span>
-                            </div>
-                            <div>
-                                <span>商品质量</span>
-                                <span>商品质量</span>
-                            </div>
-                            <div>
-                                <span>商品类型标签</span>
-                                <span>商品类型标签</span>
-                            </div>
+                        <div id="commodityImg"></div>
+                        <div id="commodityMsg"></div>
+                        <div id="leaseBox">
+                            
                         </div>
                     </div>
                 </div>
                 <!-- 评论区 -->
                 <div id="communicationbox">
+                    <!--
                     <div id="talkbox" >
                         <div id="talktext">
                             <textarea placeholder="请文明用语" ></textarea>
                         </div>
                         <div id="talkbut">
-                            <input type="button"  value="发送">
+                            <input type="button" class="btn btn-default" value="发送">
                         </div>
-                    </div>
+                    </div>-->
+                    <!--
                     <div class="speakbox">
                         <div class="headimg">
                             <img src="../img/user.jpeg" /><br>
@@ -206,11 +199,133 @@
                         </div>
                     </div>
                     <hr>
+                    -->
                 </div>
             </div>
         </div>
-
     </div>
-    
 </body>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    //项目地址
+    var PROJECT_PATH = [[${#httpServletRequest.getContextPath()}]];
+
+    $(document).ready(function(){
+        //获取商品信息
+        getCommodity()
+        //获取该商品的评论
+        getComment();
+    });
+
+    //获取商品信息
+    function getCommodity(){
+        var id = [[${param.commodityId}]];
+
+        $.ajax({
+            url : PROJECT_PATH + "/commodity/commodity/"+id,
+            dataType : "json",
+            type : "get",
+            sync : false,
+            success: function(data){
+                if(data.code == 10000){
+                    var commodity = data.data;
+                    //创建显示商品信息元素
+                    buildCommodityMsgElm(commodity);
+                }else{
+                    alert(data.msg);
+                }
+            }
+        });
+    }
+
+    //创建显示商品信息元素
+    function buildCommodityMsgElm(commodity){
+        var commodityImg = $("#commodityImg");
+        var commodityMsg = $("#commodityMsg");
+        //生成标题
+        $("#innertitle").append(commodity.commodityName);
+        //生成图片
+        commodityImg.append("<img stlye='width: 1200px; height: 500px' src='../img/game_detail.png' />");
+        //生成内容
+        var comStatus = $("<div><span>商品状态:</span><span>" + commodity.commodityStatusMsg + "</span></div>");
+        var comNum = $("<div><span>商品数量:</span><span>" + commodity.commodityNum + "</span></div>");
+        var comQuality = $("<div><span>商品质量:</span><span>" + commodity.commodityQuality + "</span></div>");
+        var comTag = $("<div><span>商品类型标签:</span><span>" + commodity.commodityTag + "</span></div>");
+        commodityMsg.append(comStatus).append(comNum).append(comQuality).append(comTag);
+    }
+
+    //获取商品的评论
+    function getComment(){
+        var commodityId = [[${param.commodityId}]];
+
+        $.ajax({
+            url : PROJECT_PATH + "/comment/comments",
+            dataType : "json",
+            type : "post",
+            data : {"commodityId" : commodityId[0]},
+            sync : false,
+            success : function(data){
+                if(data.code == 10000){
+                    var comments = data.data;
+                    //创建显示商品评论
+                    buildCommentList(comments);
+                }else{
+                    alert(data.msg);
+                }
+            }
+        });
+    }
+
+    //生成评论列表
+    function buildCommentList(comments){
+        var communicationbox = $("#communicationbox");
+        communicationbox.empty();
+        //生成发表篇评论元素
+        var talkbox = $("<div id=\"talkbox\" ><div id=\"talktext\"><textarea placeholder=\"请文明用语\" ></textarea></div><div id=\"talkbut\"><input type=\"button\" class=\"btn btn-default\" onclick='postComment()' value=\"发送\"></div></div>")
+        communicationbox.append(talkbox);
+        //生成讨论信息元素
+        $.each(comments,function(index,comment){
+            var speakbox = $("    <div class=\"speakbox\">\n" +
+                "        <div class=\"headimg\">\n" +
+                "        <img src=\"/CommoditySharePlatformWeb_war/static/img/user.jpeg\" /><br>\n" +
+                "        <span>"+comment.commentUserName+"</span>\n" +
+                "        </div>\n" +
+                "        <div class=\"speek\">\n" +
+                "        <span>"+comment.commentContent+"</span>\n" +
+                "        </div>\n" +
+                "        </div>\n" +
+                "        <hr>");
+            communicationbox.append(speakbox);
+        });
+    }
+
+    //发表评论
+    function postComment(){
+        var userId = [[${session.userId}]];
+        var commodityId = [[${param.commodityId}]];
+        if (userId == "" || userId == undefined || userId == null){
+            window.location.href = PROJECT_PATH + "/to_login";
+            return ;
+        }
+
+        //发送添加评论请求
+        var text = $("#talktext>textarea").val();
+        $.ajax({
+            url : PROJECT_PATH + "/comment/comment",
+            dataType : "json",
+            type : "post",
+            data : {"commentContent":text,"commentUserId":userId,"commentCommodityId":commodityId[0]},
+            sync : false,
+            success : function(data){
+                if(data.code == 10000){
+                    getComment();
+                }else{
+                    alert(data.msg);
+                }
+            }
+        });
+    }
+
+    /*]]>*/
+</script>
 </html>

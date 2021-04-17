@@ -1,22 +1,41 @@
 package com.commodityshareplatform.web.utils;
 
+import org.apache.shiro.crypto.hash.SimpleHash;
+import org.apache.shiro.util.ByteSource;
+
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class MD5Utils {
-    public static String stringToMD5(String plainText) {
-        byte[] secretBytes = null;
-        try {
-            secretBytes = MessageDigest.getInstance("md5").digest(
-                    plainText.getBytes());
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException("没有这个md5算法！");
-        }
-        String md5code = new BigInteger(1, secretBytes).toString(16);
-        for (int i = 0; i < 32 - md5code.length(); i++) {
-            md5code = "0" + md5code;
-        }
-        return md5code;
+    /**
+     *
+     * @param credentials   密码
+     * @param saltStr   盐值
+     * @return
+     */
+    public static Object stringToMD5Salt(Object credentials,String saltStr) {
+        String hashAlgorithmName = "MD5";//加密类型
+        ByteSource salt = ByteSource.Util.bytes(saltStr);//盐值
+        int hashIterations = 100;//加密次数
+
+        Object simpleHash = new SimpleHash(hashAlgorithmName, credentials, salt, hashIterations);
+//        Object simpleHash1 = new SimpleHash(hashAlgorithmName, credentials);
+        return simpleHash;
+    }
+
+    /**
+     *
+     * @param credentials   密码
+     * @return
+     */
+    public static Object stringToMD5(Object credentials) {
+        String hashAlgorithmName = "MD5";//加密类型
+//        ByteSource salt = ByteSource.Util.bytes(saltStr);//盐值
+        int hashIterations = 100;//加密次数
+
+//        Object simpleHash = new SimpleHash(hashAlgorithmName, credentials, salt, hashIterations);
+        Object simpleHash1 = new SimpleHash(hashAlgorithmName,credentials,null,hashIterations);
+        return simpleHash1;
     }
 }

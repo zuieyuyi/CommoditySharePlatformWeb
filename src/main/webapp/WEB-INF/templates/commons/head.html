@@ -12,7 +12,9 @@
     <link rel="stylesheet" href="../css/mypage.css" th:href="@{/static/css/mypage.css}" type="text/css"/>
     <link rel="stylesheet" href="../css/commodityMsg.css" th:href="@{/static/css/commodityMsg.css}" type="text/css"/>
     <link rel="stylesheet" href="../css/showpage.css" th:href="@{/static/css/showpage.css}" type="text/css"/>
+    <link rel="stylesheet" href="../css/model.css" th:href="@{/static/css/model.css}" type="text/css"/>
     <script src="vendor/jquery/jquery.min.js" th:src="@{/webjars/jquery/3.5.1/jquery.js}"></script>
+    <script th:src="@{/static/js/validate.js}"></script>
 </div>
 <body>
 <!-- 顶部栏 -->
@@ -38,7 +40,7 @@
         </div>
         <div id="loginbox">
             <div><img src="../img/user.jpeg" th:src="@{/static/img/user.jpeg}"></div>
-            <div><a href="#">customer</a></div>
+            <div><a href="#">[[${session.userName == null?"游客":session.userName}]]</a></div>
         </div>
     </div>
 </div>

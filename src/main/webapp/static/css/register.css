@@ -29,6 +29,13 @@
 	outline: none;
 }
 
+.pinkColor{
+    margin-top: 20px;
+    background-color: violet;
+    font-size: 15px;
+    color: white;
+}
+
 input[type='submit']{
     margin-top: 20px;
     background-color: violet;

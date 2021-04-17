@@ -42,6 +42,21 @@ public class UserService implements IUserService {
         return users;
     }
 
+    public List<User> selectUserByEx(UserExample example) {
+        List<User> users = userMapper.selectByExample(example);
+
+        for (User user : users) {
+            if (user.getUserStatus() == UserStatusEnum.VIP_1.getStatusCode()) {
+                user.setUserStatusMsg(UserStatusEnum.VIP_1.getStatus());
+            } else if (user.getUserStatus() == UserStatusEnum.VIP_2.getStatusCode()) {
+                user.setUserStatusMsg(UserStatusEnum.VIP_2.getStatus());
+            } else if (user.getUserStatus() == UserStatusEnum.VIP_3.getStatusCode()) {
+                user.setUserStatusMsg(UserStatusEnum.VIP_3.getStatus());
+            }
+        }
+        return users;
+    }
+
     /**
      * 通过id查用户
      *

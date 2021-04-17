@@ -106,14 +106,14 @@
         var sortmain = $(id);
         //生成内容标题元素
         var titleDiv = $("<div class='sortmaintitle'></div>");
-        var title = $("<a href='#'>" + tag + "</a>");
-        var more = $("<a href='#'>更多>>>>>>></a>");
+        var title = $("<a href='" + PROJECT_PATH + "/to_showpage?commodityTag=" + tag + "' >" + tag + "</a>");
+        var more = $("<a href='" + PROJECT_PATH + "/to_showpage?commodityTag=" + tag + "'>更多>>>>>>></a>");
         titleDiv.append(title).append(more);
         //生成内容元素
         var contextDiv = $("<div class='info'></div>");
         $.each(ls,function(index,coms){
             var contextDiv2 = $("<div></div>");
-            var contexthref = $("<a href='showpage.html' ></a>");
+            var contexthref = $("<a href='" + PROJECT_PATH + "/to_commoditypage?commodityId=" + coms.commodityId + "' ></a>");
             var contextImg = $("<img src='../img/dongman1.jpg'>");
             contextDiv.append(contextDiv2.append(contexthref.append(contextImg).append("<br/>" + coms.commodityName)));
         });
@@ -146,7 +146,7 @@
         var tagClassList = ["onea","twoa","threea","foura","fivea","sixa","sevena","eighta"];
 
         $.each(tags,function (index,tag) {
-            var tagA = $("<a class='"+ tagClassList[index] +"' href='#'>&nbsp;&nbsp;" + tag + "&nbsp;&nbsp;</a>");
+            var tagA = $("<a class='"+ tagClassList[index] +"' href='" + PROJECT_PATH + "/to_showpage?commodityTag=" + tag + "'>&nbsp;&nbsp;" + tag + "&nbsp;&nbsp;</a>");
             tagInfo.append(tagA);
         });
     }

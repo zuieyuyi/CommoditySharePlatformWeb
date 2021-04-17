@@ -15,9 +15,10 @@
 				</div>
 				<div id="messagebox">
 					<div id="forminfo">
-						<input id="user" class="username" type="text" placeholder="用户名"><br />
-						<input id="pwd" class="password" type="password" placeholder="密码"><br />
-						<input type="submit" value="登录">
+						<input id="user" class="username" type="text" name="username" placeholder="用户名"><br />
+						<input id="pwd" class="password" type="password" name="password" placeholder="密码"><br />
+						<input id="rememberMe" type="checkbox" style="width: 15px;height: 15px;" name="rememberMe">&nbsp;&nbsp;&nbsp;&nbsp;<span>记住我</span><br />
+						<input type="button" style="background-color: #FF69B4;font-size: 20px;color: white;" class="pinkColor" onclick="login()" value="登录">
 					</div>
 					<div id="regis">
 						<a href="" th:href="@{/to_register}">注册账号</a>
@@ -31,6 +32,27 @@
 		/*<![CDATA[*/
 		//项目地址
 		var PROJECT_PATH = [[${#httpServletRequest.getContextPath()}]];
+
+		function login(){
+			var userName = $("#user").val();
+			var password = $("#pwd").val();
+			var rememberMe = $("#rememberMe").prop('checked');
+			$.ajax({
+				url : PROJECT_PATH + "/login",
+				type: "post",//方法类型
+				dataType: "json",//预期服务器返回的数据类型
+				async: false,
+				data: {"username":userName,"password":password,"rememberMe":rememberMe},
+				success: function(data){
+					if(data.code == 10000){
+						alert("登录成功");
+						window.location.href = PROJECT_PATH + "/index";
+					}else{
+						alert(data.msg);
+					}
+				}
+			});
+		}
 
 		/*]]>*/
 	</script>

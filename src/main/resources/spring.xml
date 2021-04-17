@@ -5,6 +5,7 @@
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:tx="http://www.springframework.org/schema/tx"
        xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:cache="http://www.springframework.org/schema/cache"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
         http://www.springframework.org/schema/tx
@@ -12,7 +13,8 @@
         http://www.springframework.org/schema/aop
         http://www.springframework.org/schema/aop/spring-aop-4.1.xsd
         http://www.springframework.org/schema/context
-        http://www.springframework.org/schema/context/spring-context-4.1.xsd">
+        http://www.springframework.org/schema/context/spring-context-4.1.xsd
+        http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd">
     
     <context:component-scan base-package="com.commodityshareplatform.web">
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
@@ -21,8 +23,8 @@
     <!-- 导入配置文件
        若要切换数据库环境则需改动数据库配置文件
      -->
-    <context:property-placeholder location="classpath:/dev/jdbc.properties"></context:property-placeholder>
-    <context:property-placeholder location="classpath:/dev/config.properties"></context:property-placeholder>
+    <context:property-placeholder location="classpath:/dev/jdbc.properties" ignore-unresolvable="true" ></context:property-placeholder>
+    <context:property-placeholder location="classpath:/dev/config.properties" ignore-unresolvable="true" ></context:property-placeholder>
     <!--数据库连接池配置 -->
     <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
           destroy-method="close" lazy-init="false">
@@ -84,71 +86,191 @@
         <property name="dataSource" ref="dataSource"></property>
     </bean>
 
-    <!-- shiro配置 -->
-    <!-- 1、配置SecurityManage -->
-<!--    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager" >-->
-        <!-- 配置缓存管理器 -->
-        <!--        <property name="cacheManager" ref="cacheManager"></property>-->
-        <!-- 认证授权 -->
-        <!--        <property name="realm" ref="jdbcRealm"></property>-->
-        <!-- 配置多个realm -->
-        <!--
-        <property name="realms">
-            <list>
-                <ref bean="jdbcRealm"></ref>
-            </list>
-        </property>
-        -->
+    <!-- redis配置 -->
+    <!--
+    导入redis依赖（jedis和spring-redis集成jar包）
+    1.导入数据库外部文件redis.properties
+    2.创建数据库连接池
+    3.创建Redis连接工厂
+    4.创建RedisTemplate模板
+    5.配置缓存管理器
+    -->
+<!--    <context:property-placeholder location="classpath:/dev/redis.properties"  ignore-unresolvable="true"></context:property-placeholder>-->
+<!--    &lt;!&ndash; 2. redis连接池配置&ndash;&gt;-->
+<!--    <bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">-->
+<!--        &lt;!&ndash;最大空闲数&ndash;&gt;-->
+<!--        <property name="maxIdle" value="${redis.maxIdle}"/>-->
+<!--        &lt;!&ndash;连接池的最大数据库连接数  &ndash;&gt;-->
+<!--        <property name="maxTotal" value="${redis.maxTotal}"/>-->
+<!--        &lt;!&ndash;最大建立连接等待时间&ndash;&gt;-->
+<!--        <property name="maxWaitMillis" value="${redis.maxWaitMillis}"/>-->
+<!--        &lt;!&ndash;逐出连接的最小空闲时间 默认1800000毫秒(30分钟)&ndash;&gt;-->
+<!--        <property name="minEvictableIdleTimeMillis" value="${redis.minEvictableIdleTimeMillis}"/>-->
+<!--        &lt;!&ndash;每次逐出检查时 逐出的最大数目 如果为负数就是 : 1/abs(n), 默认3&ndash;&gt;-->
+<!--        <property name="numTestsPerEvictionRun" value="${redis.numTestsPerEvictionRun}"/>-->
+<!--        &lt;!&ndash;逐出扫描的时间间隔(毫秒) 如果为负数,则不运行逐出线程, 默认-1&ndash;&gt;-->
+<!--        <property name="timeBetweenEvictionRunsMillis" value="${redis.timeBetweenEvictionRunsMillis}"/>-->
+<!--        &lt;!&ndash;是否在从池中取出连接前进行检验,如果检验失败,则从池中去除连接并尝试取出另一个&ndash;&gt;-->
+<!--        <property name="testOnBorrow" value="${redis.testOnBorrow}"/>-->
+<!--        &lt;!&ndash;在空闲时检查有效性, 默认false  &ndash;&gt;-->
+<!--        <property name="testWhileIdle" value="${redis.testWhileIdle}"/>-->
 <!--    </bean>-->
+
+<!--    &lt;!&ndash; 3. redis连接工厂 &ndash;&gt;-->
+<!--    <bean id="connectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"-->
+<!--          destroy-method="destroy">-->
+<!--        <property name="poolConfig" ref="poolConfig"/>-->
+<!--        &lt;!&ndash;IP地址 &ndash;&gt;-->
+<!--        <property name="hostName" value="${redis.hostName}"/>-->
+<!--        &lt;!&ndash;端口号  &ndash;&gt;-->
+<!--        <property name="port" value="${redis.port}"/>-->
+<!--        &lt;!&ndash;如果Redis设置有密码  &ndash;&gt;-->
+<!--        <property name="password" value="${redis.password}"/>-->
+<!--        &lt;!&ndash;客户端超时时间单位是毫秒  &ndash;&gt;-->
+<!--        <property name="timeout" value="${redis.timeout}"/>-->
+<!--    </bean>-->
+
+<!--    &lt;!&ndash; 4. redis操作模板,使用该对象可以操作redis  &ndash;&gt;-->
+<!--    <bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">-->
+<!--        <property name="connectionFactory" ref="connectionFactory"/>-->
+<!--        &lt;!&ndash;如果不配置Serializer，那么存储的时候缺省使用String，如果用User类型存储，那么会提示错误User can't cast to String！！  &ndash;&gt;-->
+<!--        <property name="keySerializer">-->
+<!--            <bean class="org.springframework.data.redis.serializer.StringRedisSerializer"/>-->
+<!--        </property>-->
+<!--        <property name="valueSerializer">-->
+<!--            <bean class="org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer"/>-->
+<!--        </property>-->
+<!--        <property name="hashKeySerializer">-->
+<!--            <bean class="org.springframework.data.redis.serializer.StringRedisSerializer"/>-->
+<!--        </property>-->
+<!--        <property name="hashValueSerializer">-->
+<!--            <bean class="org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer"/>-->
+<!--        </property>-->
+<!--        &lt;!&ndash;开启事务  &ndash;&gt;-->
+<!--        <property name="enableTransactionSupport" value="true"/>-->
+<!--    </bean>-->
+<!--    &lt;!&ndash;5.配置缓存管理器&ndash;&gt;-->
+<!--    &lt;!&ndash;CacheManager ->Cache ->Element&ndash;&gt;-->
+<!--    <bean id="redisCacheManager" class="org.springframework.data.redis.cache.RedisCacheManager">-->
+<!--        <constructor-arg name="redisOperations" ref="redisTemplate" />-->
+<!--        &lt;!&ndash;redis缓存数据过期时间单位秒&ndash;&gt;-->
+<!--        <property name="defaultExpiration" value="${redis.expiration}" />-->
+
+<!--        <property name="usePrefix" value="true"/>-->
+
+<!--        <property name="cachePrefix">-->
+<!--            <bean class="org.springframework.data.redis.cache.DefaultRedisCachePrefix">-->
+<!--                <constructor-arg index="0" value="-cache-"/>-->
+<!--            </bean>-->
+<!--        </property>-->
+<!--    </bean>-->
+<!--    &lt;!&ndash;6.配置自定义key生成器CacheKeyGenerator&ndash;&gt;-->
+<!--&lt;!&ndash;    <bean id="cacheKeyGenerator" class="com.star.util.CacheKeyGenerator"/>&ndash;&gt;-->
+<!--    &lt;!&ndash;7.启用缓存注解功能&ndash;&gt;-->
+<!--&lt;!&ndash;    <cache:annotation-driven cache-manager="redisCacheManager" key-generator="cacheKeyGenerator"/>&ndash;&gt;-->
+<!--    &lt;!&ndash; 配置RedisCacheConfig &ndash;&gt;-->
+<!--    <bean id="redisCacheConfig" class="com.commodityshareplatform.web.redis.config.RedisCacheConfig">-->
+<!--        <constructor-arg ref="connectionFactory"/>-->
+<!--        <constructor-arg ref="redisTemplate"/>-->
+<!--        <constructor-arg ref="redisCacheManager"/>-->
+<!--    </bean>-->
+
+
+    <!-- 下面这个是整合Mybatis的二级缓存使用的 -->
+<!--    <bean id="redisCacheTransfer" class="cn.qlq.jedis.RedisCacheTransfer">-->
+<!--        <property name="jedisConnectionFactory" ref="connectionFactory" />-->
+<!--    </bean>-->
+
+    <!-- shiro配置 -->
+
+    <!-- 1、配置SecurityManage -->
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager" >
+        <!-- 配置缓存管理器 -->
+        <property name="cacheManager" ref="cacheManager"></property>
+        <!-- 认证授权 -->
+        <property name="realm" ref="loginRealm"></property>
+
+<!--        <property name="authenticator" ref="authenticator"></property>-->
+
+<!--        <property name="realms">-->
+<!--            <list>-->
+<!--                <ref bean="loginRealm"></ref>-->
+<!--            </list>-->
+<!--        </property>-->
+
+    </bean>
     <!--
     配置 CacheManager.
     需要加入 ehcache 的 jar 包及配置文件.
     -->
 
-    <!--    <bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">-->
-    <!-- 缓存配置文件 -->
-    <!--      <property name="cacheManagerConfigFile" value="classpath:ehcache.xml"/>-->
-    <!--    </bean>-->
+    <bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
+        <!-- 缓存配置文件 -->
+        <property name="cacheManagerConfigFile" value="classpath:ehcache.xml"/>
+    </bean>
+<!--    <bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">-->
+<!--        <property name="cacheManager" ref="ehCacheManager"/>-->
+<!--    </bean>-->
+<!--    <bean id="ehCacheManager" class ="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">-->
+<!--        <property name="configLocation" value="classpath:ehcache.xml" />-->
+<!--        <property name="shared" value="true"></property>-->
+<!--    </bean>-->
+
+
+    <!-- 配置多realm认证策略
+    多realm验证默认的认证策略为:AtLeastOneSuccessfulStrategy
+        AllSuccessfulStrategy：所有的realm都必须认证通过，返回所有通过realm的认证信息
+        AtLeastOneSuccessfulStrategy：至少通过一个realm认证，返回所有通过的realm的认证信息
+        FirstSuccessfulStrategy：第一条realm通过后面的realm认证都忽略（并非不执行），只返回第一个通过条realm的认证信息
+ -->
+<!--    <bean class="org.apache.shiro.authc.pam.ModularRealmAuthenticator" id="authenticator">-->
+<!--        &lt;!&ndash; 配置认证策略 &ndash;&gt;-->
+<!--        <property name="authenticationStrategy">-->
+<!--            <bean class="org.apache.shiro.authc.pam.AtLeastOneSuccessfulStrategy"></bean>-->
+<!--        </property>-->
+<!--    </bean>-->
 
     <!--
     配置 Realm
     直接配置实现了 org.apache.shiro.realm.Realm 接口的 bean
     -->
-    <!--    <bean id="jdbcRealm" class="com.shiro.test.realm.MyRealm">-->
-    <!-- 通过配置credentialsMatcher属性来，替换realm的加密算法 -->
-    <!--        <property name="credentialsMatcher">-->
-    <!--            <bean class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">-->
-    <!--                &lt;!&ndash; 指定加密方式 &ndash;&gt;-->
-    <!--                <property name="hashAlgorithmName" value="MD5"></property>-->
-    <!--                &lt;!&ndash; 指定加密次数 &ndash;&gt;-->
-    <!--                <property name="hashIterations" value="100"></property>-->
-    <!--            </bean>-->
-    <!--        </property>-->
-    <!--    </bean>-->
+        <bean id="loginRealm" class="com.commodityshareplatform.web.shiro.realm.LoginRealm">
+    <!-- 通过配置ccredentialsMather属性来，替换realm的加密算法 -->
+            <property name="credentialsMatcher">
+                <bean class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
+                    <!-- 指定加密方式 -->
+                    <property name="hashAlgorithmName" value="MD5"></property>
+                    <!-- 指定加密次数 -->
+                    <property name="hashIterations" value="100"></property>
+                    <property name="storedCredentialsHexEncoded" value="true" />
+                </bean>
+            </property>
+        </bean>
 
     <!--
     配置 LifecycleBeanPostProcessor. 可以自定的来调用配置在 Spring IOC 容器中 shiro bean 的生命周期方法.
     -->
-<!--    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>-->
+    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
     <!--
     启用 IOC 容器中使用 shiro 的注解. 但必须在配置了 LifecycleBeanPostProcessor 之后才可以使用.
     -->
-<!--    <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"-->
-<!--          depends-on="lifecycleBeanPostProcessor"/>-->
-<!--    <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">-->
-<!--        <property name="securityManager" ref="securityManager"/>-->
-<!--    </bean>-->
+    <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"
+          depends-on="lifecycleBeanPostProcessor"/>
+    <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+        <property name="securityManager" ref="securityManager"/>
+    </bean>
 
     <!--
     配置 ShiroFilter.
     id 必须和 web.xml 文件中配置的 DelegatingFilterProxy 的 <filter-name> 一致.
                       若不一致, 则会抛出: NoSuchBeanDefinitionException. 因为 Shiro 会来 IOC 容器中查找和 <filter-name> 名字对应的 filter bean.
     -->
-<!--    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">-->
-<!--        <property name="securityManager" ref="securityManager"/>-->
-<!--        <property name="loginUrl" value="/to_login"/>-->
-<!--        <property name="successUrl" value="/list"/>-->
-<!--        <property name="unauthorizedUrl" value="/unauthorized"/>-->
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <property name="securityManager" ref="securityManager"/>
+        <property name="loginUrl" value="/to_login"/>
+        <property name="successUrl" value="/index"/>
+        <property name="unauthorizedUrl" value="/index"/>
+        <property name="filterChainDefinitionMap" ref="filterChainDefinitionMap"></property>
         <!--
             配置哪些页面需要受保护.
             以及访问这些页面需要的权限.
@@ -168,5 +290,13 @@
                        /** = authc
                    </value>
                </property>-->
-<!--    </bean>-->
+    </bean>
+
+    <!-- 配置一个bean，该bean实际上是一个Map。通过实例工厂方法的方式 -->
+    <bean id="filterChainDefinitionMap" factory-bean="filterChainDefinitionMapBuilder"
+          factory-method="filterChainDefinitionMapBuilder">
+    </bean>
+
+    <bean class="com.commodityshareplatform.web.shiro.factory.FilterChainDefinitionMapBuilder" id="filterChainDefinitionMapBuilder">
+    </bean>
 </beans>

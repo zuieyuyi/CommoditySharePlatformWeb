@@ -69,11 +69,13 @@
         clickIndex("#typeDiv");
         clickIndex("#yearsDiv");
         clickIndex("#monthDiv");
-        //
+        //默认隐藏月份框
         $("#monthDiv").hide();
 
+        var tag = [[${param.commodityTag==null?"":param.commodityTag}]];
+
         //获取
-        toPage(1);
+        toPage(1,tag[0]);
     });
 
     //时间标签生成
