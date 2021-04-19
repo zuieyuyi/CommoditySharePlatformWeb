@@ -158,11 +158,11 @@
     /* background-color: red; */
     flex: 1;
 }
-input[type=button]{
-    height: 40px;
-    width: 60px;
-    margin-top: 20px;
-}
+/*input[type=button]{*/
+/*    height: 40px;*/
+/*    width: 60px;*/
+/*    margin-top: 20px;*/
+/*}*/
 
 #talkbox div:first-child>textarea{
     height: 100px;

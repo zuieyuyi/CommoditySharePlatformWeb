@@ -13,8 +13,7 @@
     <link rel="stylesheet" href="../css/commodityMsg.css" th:href="@{/static/css/commodityMsg.css}" type="text/css"/>
     <link rel="stylesheet" href="../css/showpage.css" th:href="@{/static/css/showpage.css}" type="text/css"/>
     <link rel="stylesheet" href="../css/model.css" th:href="@{/static/css/model.css}" type="text/css"/>
-    <script src="vendor/jquery/jquery.min.js" th:src="@{/webjars/jquery/3.5.1/jquery.js}"></script>
-    <script th:src="@{/static/js/validate.js}"></script>
+    <link rel="stylesheet" href="" th:href="@{/webjars/bootstrap/4.5.3/css/bootstrap.css}"/>
 </div>
 <body>
 <!-- 顶部栏 -->
@@ -36,13 +35,18 @@
             <a href="#">&nbsp;xx</a>
         </div>
         <div class="ainner">
-            <a href="#">&nbsp;xx</a>
+            <a href="#" th:href="@{/to_mypage}">&nbsp;我的</a>
         </div>
         <div id="loginbox">
             <div><img src="../img/user.jpeg" th:src="@{/static/img/user.jpeg}"></div>
             <div><a href="#">[[${session.userName == null?"游客":session.userName}]]</a></div>
         </div>
     </div>
+</div>
+<div th:fragment="js">
+    <script src="vendor/jquery/jquery.min.js" th:src="@{/webjars/jquery/3.5.1/jquery.js}"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js" th:src="@{/webjars/bootstrap/4.5.3/js/bootstrap.js}"></script>
+    <script th:src="@{/static/js/validate.js}"></script>
 </div>
 </body>
 </html>

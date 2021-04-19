@@ -129,81 +129,12 @@
                 </div>
                 <!-- 评论区 -->
                 <div id="communicationbox">
-                    <!--
-                    <div id="talkbox" >
-                        <div id="talktext">
-                            <textarea placeholder="请文明用语" ></textarea>
-                        </div>
-                        <div id="talkbut">
-                            <input type="button" class="btn btn-default" value="发送">
-                        </div>
-                    </div>-->
-                    <!--
-                    <div class="speakbox">
-                        <div class="headimg">
-                            <img src="../img/user.jpeg" /><br>
-                            <span>user1</span>
-                        </div>
-                        <div class="speek">
-                            <span>6666666666666666666666666666666</span>
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="speakbox">
-                        <div class="headimg">
-                            <img src="../img/user.jpeg" /><br>
-                            <span>user1</span>
-                        </div>
-                        <div class="speek">
-                            <span>6666666666666666666666666666666</span>
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="speakbox">
-                        <div class="headimg">
-                            <img src="../img/user.jpeg" /><br>
-                            <span>user1</span>
-                        </div>
-                        <div class="speek">
-                            <span>6666666666666666666666666666666</span>
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="speakbox">
-                        <div class="headimg">
-                            <img src="../img/user.jpeg" /><br>
-                            <span>user1</span>
-                        </div>
-                        <div class="speek">
-                            <span>6666666666666666666666666666666</span>
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="speakbox">
-                        <div class="headimg">
-                            <img src="../img/user.jpeg" /><br>
-                            <span>user1</span>
-                        </div>
-                        <div class="speek">
-                            <span>6666666666666666666666666666666</span>
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="speakbox">
-                        <div class="headimg">
-                            <img src="../img/user.jpeg" /><br>
-                            <span>user1</span>
-                        </div>
-                        <div class="speek">
-                            <span>6666666666666666666666666666666</span>
-                        </div>
-                    </div>
-                    <hr>
-                    -->
+
                 </div>
             </div>
         </div>
     </div>
+    <div th:replace="~{/commons/head::js}"></div>
 </body>
 <script th:inline="javascript">
     /*<![CDATA[*/
@@ -310,6 +241,11 @@
 
         //发送添加评论请求
         var text = $("#talktext>textarea").val();
+        text = text.trim();
+        if (text == null || text == undefined || text == ""){
+            alert("请输入发言内容");
+            return ;
+        }
         $.ajax({
             url : PROJECT_PATH + "/comment/comment",
             dataType : "json",

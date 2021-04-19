@@ -3,6 +3,7 @@ package com.commodityshareplatform.web.order.server.impl;
 import com.commodityshareplatform.web.commodity.bean.Commodity;
 import com.commodityshareplatform.web.commodity.bean.CommodityExample;
 import com.commodityshareplatform.web.commodity.dao.CommodityMapper;
+import com.commodityshareplatform.web.commodity.server.ICommodityService;
 import com.commodityshareplatform.web.enuminfo.OrderStatusEnum;
 import com.commodityshareplatform.web.order.bean.Order;
 import com.commodityshareplatform.web.order.bean.OrderExample;
@@ -10,6 +11,7 @@ import com.commodityshareplatform.web.order.dao.OrderMapper;
 import com.commodityshareplatform.web.order.server.IOrderService;
 import com.commodityshareplatform.web.user.bean.User;
 import com.commodityshareplatform.web.user.dao.UserMapper;
+import com.commodityshareplatform.web.user.server.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -28,10 +30,15 @@ public class OrderService implements IOrderService {
     @Autowired
     CommodityMapper commodityMapper;
 
+    @Autowired
+    IUserService userService;
+    @Autowired
+    ICommodityService commodityService;
+
     @Override
-    public List<Order> selectAllOrders() {
+    public List<Order> selectAllOrders(OrderExample example) {
         CommodityExample commodityExample = new CommodityExample();
-        List<Order> orders = orderMapper.selectAllOrder();
+        List<Order> orders = orderMapper.selectByExample(example);
         List<User> users = userMapper.selectAllUsers();
         List<Commodity> commodities = commodityMapper.selectAllCommodities(commodityExample);
 
@@ -81,7 +88,22 @@ public class OrderService implements IOrderService {
         OrderExample.Criteria criteria = orderExample.createCriteria();
         criteria.andOrderIdEqualTo(id);
         List<Order> orders = orderMapper.selectByExample(orderExample);
-        return orders.get(0);
+        Order order = orders.get(0);
+
+        User user = userService.selectUserById(order.getOrderUserId());
+        User pubUser = userService.selectUserById(order.getOrderPubUserId());
+        Commodity commodity = commodityService.selectCommodityById(order.getOrderCommodityId());
+
+        if (user != null){
+            order.setOrderUserName(user.getUserName());
+        }
+        if (pubUser != null){
+            order.setOrderPubUserName(pubUser.getUserName());
+        }
+        if (commodity != null){
+            order.setOrderCommodityName(commodity.getCommodityName());
+        }
+        return order;
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW,

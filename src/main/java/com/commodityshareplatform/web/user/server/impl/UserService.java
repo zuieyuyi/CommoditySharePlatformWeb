@@ -5,11 +5,13 @@ import com.commodityshareplatform.web.user.bean.User;
 import com.commodityshareplatform.web.user.bean.UserExample;
 import com.commodityshareplatform.web.user.dao.UserMapper;
 import com.commodityshareplatform.web.user.server.IUserService;
+import com.commodityshareplatform.web.utils.MD5Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.thymeleaf.util.StringUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -68,6 +70,9 @@ public class UserService implements IUserService {
         UserExample.Criteria criteria = userExample.createCriteria();
         criteria.andUserIdEqualTo(id);
         List<User> users = userMapper.selectByExample(userExample);
+        if (users.size() == 0){
+            return null;
+        }
         User user = users.get(0);
         return user;
     }
@@ -104,17 +109,18 @@ public class UserService implements IUserService {
     public Integer updateUser(User user) {
         UserExample userExample = new UserExample();
         UserExample.Criteria criteria = userExample.createCriteria();
-        criteria.andUserIdEqualTo(user.getUserId());
+        if (user.getUserId() != null){
+            criteria.andUserIdEqualTo(user.getUserId());
+        }
+        if (!StringUtils.isEmpty(user.getUserName())){
+            criteria.andUserNameEqualTo(user.getUserName());
+        }
 
-        User user1 = selectUserById(user.getUserId());
-        user1.setUserName(user.getUserName());
-        user1.setUserPw(user.getUserPw());
-        user1.setUserAddr(user.getUserAddr());
-        user1.setUserEmail(user.getUserEmail());
-        user1.setUserStatus(user.getUserStatus());
-        user1.setUserMoney(user.getUserMoney());
+        Object parsePwd = MD5Utils.stringToMD5(user.getUserPw());
 
-        int result = userMapper.updateByExample(user1, userExample);
+        user.setUserPw(parsePwd.toString());
+
+        int result = userMapper.updateByExampleSelective(user,userExample);
         return result;
     }
 
@@ -127,6 +133,8 @@ public class UserService implements IUserService {
     @Override
     public Integer insertUser(User user) {
         user.setUserCreateDate(new Date());
+        Object parsePwd = MD5Utils.stringToMD5(user.getUserPw());
+        user.setUserPw(parsePwd.toString());
         int result = userMapper.insertSelective(user);
         return result;
     }

@@ -1,6 +1,7 @@
 package com.commodityshareplatform.web.index.controller;
 
 import com.commodityshareplatform.web.user.bean.User;
+import com.commodityshareplatform.web.user.bean.UserExample;
 import com.commodityshareplatform.web.user.server.IUserService;
 import com.commodityshareplatform.web.user.server.impl.UserService;
 import com.commodityshareplatform.web.utils.MD5Utils;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -55,6 +57,26 @@ public class IndexController {
         return "commodityWeb/commodityPage";
     }
 
+    @RequestMapping(value = "to_mypage",method = RequestMethod.GET)
+    public String to_mypage(){
+        return "commodityWeb/mypage";
+    }
+
+    @RequestMapping(value = "logout",method = RequestMethod.GET)
+    public String logout(){
+        Subject subject = SecurityUtils.getSubject();
+        subject.logout();
+        return "redirect:to_login";
+    }
+
+    /**
+     * 登录
+     * @param username
+     * @param password
+     * @param rememberMe
+     * @param session
+     * @return
+     */
     @RequestMapping(value = "login",method = RequestMethod.POST)
     @ResponseBody
     public Result login(@RequestParam("username") String username, @RequestParam("password") String password, @RequestParam("rememberMe") Boolean rememberMe , HttpSession session){
@@ -71,7 +93,14 @@ public class IndexController {
             try{
                 //登录认证+授权
                 subject.login(usernamePasswordToken);
+                //获取用户信息保存至session
+                UserExample ex = new UserExample();
+                UserExample.Criteria criteria = ex.createCriteria();
+                criteria.andUserNameEqualTo(username);
+                List<User> users = userService.selectUserByEx(ex);
+                User user = users.get(0);
                 session.setAttribute("userName",username);
+                session.setAttribute("userId",user.getUserId());
                 return ResultUtils.success();
             }catch (AuthenticationException ae){ /* 抛出的异常全为AuthenticationException的子类 */
 //                System.out.println("登陆失败：" + ae.toString());
@@ -81,6 +110,11 @@ public class IndexController {
         return ResultUtils.error(-1,"登录失败");
     }
 
+    /**
+     * 注册
+     * @param user
+     * @return
+     */
     @RequestMapping(value = "register",method = RequestMethod.POST)
     @ResponseBody
     public Result register(User user){

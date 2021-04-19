@@ -44,14 +44,18 @@ public class UserController {
      */
     @RequestMapping(value = "users",method = RequestMethod.GET)
     @ResponseBody
-    public Result<User> getAllUsers(HttpServletRequest request){
+    public Result<User> getUsers(HttpServletRequest request){
         String userName = request.getParameter("userName") == null?"":request.getParameter("userName");
+        String notUserId = request.getParameter("notUserId") == null?"":request.getParameter("notUserId");
 
         UserExample example = new UserExample();
         UserExample.Criteria criteria = example.createCriteria();
         //查询条件
         if (!StringUtils.isEmpty(userName)){
             criteria.andUserNameEqualTo(userName);
+        }
+        if (!StringUtils.isEmpty(notUserId)){
+            criteria.andUserIdNotEqualTo(Integer.parseInt(notUserId));
         }
 
         List<User> users = userService.selectUserByEx(example);
@@ -124,5 +128,4 @@ public class UserController {
             return ResultUtils.error(-1,"用户保存失败");
         }
     }
-
 }

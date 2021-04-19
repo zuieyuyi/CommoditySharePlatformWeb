@@ -31,7 +31,7 @@ public class CommodityController {
      */
     @RequestMapping(value = "commodities",method = RequestMethod.GET)
     @ResponseBody
-    public Result<PageInfo> getAllCommodities(HttpServletRequest request
+    public Result<PageInfo> getCommodities(HttpServletRequest request
             , @RequestParam(value = "pn",defaultValue = "1")Integer pn , @RequestParam(value = "ps",defaultValue = "5") Integer ps){
         PageHelper.startPage(pn,ps);
         CommodityExample example = new CommodityExample();
@@ -41,6 +41,7 @@ public class CommodityController {
         String commodityStatus = request.getParameter("commodityStatus") == null?"":request.getParameter("commodityStatus");
         String year = request.getParameter("year") == null?"":request.getParameter("year");
         String month = request.getParameter("month") == null?"":request.getParameter("month");
+        String userId = request.getParameter("userId") == null?"":request.getParameter("userId");
 
         //过滤条件
         if (!StringUtils.isEmpty(commodityTag)){
@@ -75,6 +76,9 @@ public class CommodityController {
                 logger.error(this.getClass().getName()+"---getAllCommodities---isError");
             }
             criteria.andCommodityCreateDateBetween(date,date2);
+        }
+        if (!StringUtils.isEmpty(userId)){
+            criteria.andCommodityUserIdEqualTo(Integer.parseInt(userId));
         }
 
         List<Commodity> commodities = commodityService.selectAllCommodities(example);
@@ -112,6 +116,9 @@ public class CommodityController {
     @RequestMapping(value = "commodity",method = RequestMethod.PUT)
     @ResponseBody
     public Result<Commodity> saveCommodity(Commodity commodity){
+        if (commodity.getCommodityId() == null || commodity.getCommodityId() == 0){
+            return ResultUtils.error(-1,"商品保存失败");
+        }
         Integer result = commodityService.updateCommodity(commodity);
         if (result != null){
             return ResultUtils.success();

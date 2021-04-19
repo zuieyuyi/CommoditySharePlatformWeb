@@ -100,9 +100,14 @@ public class CommodityService implements ICommodityService {
             UserExample.Criteria criteria1 = userExample.createCriteria();
             criteria1.andUserIdEqualTo(commodity.getCommodityUserId());
             List<User> users = userMapper.selectByExample(userExample);
-            User user = users.get(0);
-            //赋值
-            commodity.setCommodityUserName(user.getUserName());
+            User user = null;
+            if (users.size() != 0){
+                user = users.get(0);
+                //赋值
+                commodity.setCommodityUserName(user.getUserName());
+            }else {
+                commodity.setCommodityUserName("卖家账号已注销");
+            }
         }
 
         return commodity;
@@ -127,17 +132,18 @@ public class CommodityService implements ICommodityService {
     @Override
     public Integer updateCommodity(Commodity commodity) {
         //需要先查出商品信息
-        Commodity commodity1 = selectCommodityById(commodity.getCommodityId());
-        commodity1.setCommodityName(commodity.getCommodityName());
-        commodity1.setCommodityStatus(commodity.getCommodityStatus());
-        commodity1.setCommodityNum(commodity.getCommodityNum());
-        commodity1.setCommodityUserId(commodity.getCommodityUserId());
-        commodity1.setCommodityQuality(commodity.getCommodityQuality());
+//        Commodity commodity1 = selectCommodityById(commodity.getCommodityId());
+//        commodity1.setCommodityName(commodity.getCommodityName());
+//        commodity1.setCommodityStatus(commodity.getCommodityStatus());
+//        commodity1.setCommodityNum(commodity.getCommodityNum());
+//        commodity1.setCommodityUserId(commodity.getCommodityUserId());
+//        commodity1.setCommodityQuality(commodity.getCommodityQuality());
 
         CommodityExample commodityExample = new CommodityExample();
         CommodityExample.Criteria criteria = commodityExample.createCriteria();
         criteria.andCommodityIdEqualTo(commodity.getCommodityId());
-        int result = commodityMapper.updateByExample(commodity1, commodityExample);
+
+        int result = commodityMapper.updateByExampleSelective(commodity,commodityExample);
         return result;
     }
 
