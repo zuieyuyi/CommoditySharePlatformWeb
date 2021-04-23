@@ -282,6 +282,68 @@ public class OrderExample {
             return (Criteria) this;
         }
 
+        /* ---- */
+        public Criteria andOrderPubUserIdIsNull() {
+            addCriterion("ORDER_PUB_USER_ID is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderPubUserIdIsNotNull() {
+            addCriterion("ORDER_PUB_USER_ID is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderPubUserIdEqualTo(Integer value) {
+            addCriterion("ORDER_PUB_USER_ID =", value, "orderPubUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderPubUserIdNotEqualTo(Integer value) {
+            addCriterion("ORDER_PUB_USER_ID <>", value, "orderPubUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderPubUserIdGreaterThan(Integer value) {
+            addCriterion("ORDER_PUB_USER_ID >", value, "orderPubUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderPubUserIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("ORDER_PUB_USER_ID >=", value, "orderPubUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderPubUserIdLessThan(Integer value) {
+            addCriterion("ORDER_PUB_USER_ID <", value, "orderPubUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderPubUserIdLessThanOrEqualTo(Integer value) {
+            addCriterion("ORDER_PUB_USER_ID <=", value, "orderPubUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderPubUserIdIn(List<Integer> values) {
+            addCriterion("ORDER_PUB_USER_ID in", values, "orderPubUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderPubUserIdNotIn(List<Integer> values) {
+            addCriterion("ORDER_PUB_USER_ID not in", values, "orderPubUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderPubUserIdBetween(Integer value1, Integer value2) {
+            addCriterion("ORDER_PUB_USER_ID between", value1, value2, "orderPubUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderPubUserIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("ORDER_PUB_USER_ID not between", value1, value2, "orderPubUserId");
+            return (Criteria) this;
+        }
+        /* ---- */
+
         public Criteria andOrderUserIdIsNull() {
             addCriterion("ORDER_USER_ID is null");
             return (Criteria) this;
@@ -399,6 +461,127 @@ public class OrderExample {
 
         public Criteria andOrderCommodityIdNotBetween(Integer value1, Integer value2) {
             addCriterion("ORDER_COMMODITY_ID not between", value1, value2, "orderCommodityId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderCommodityNumIsNull() {
+            addCriterion("ORDER_COMMODITY_NUM is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderCommodityNumIsNotNull() {
+            addCriterion("ORDER_COMMODITY_NUM is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderCommodityNumEqualTo(Integer value) {
+            addCriterion("ORDER_COMMODITY_NUM =", value, "orderCommodityNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderCommodityNumNotEqualTo(Integer value) {
+            addCriterion("ORDER_COMMODITY_NUM <>", value, "orderCommodityNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderCommodityNumGreaterThan(Integer value) {
+            addCriterion("ORDER_COMMODITY_NUM >", value, "orderCommodityNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderCommodityNumGreaterThanOrEqualTo(Integer value) {
+            addCriterion("ORDER_COMMODITY_NUM >=", value, "orderCommodityNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderCommodityNumLessThan(Integer value) {
+            addCriterion("ORDER_COMMODITY_NUM <", value, "orderCommodityNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderCommodityNumLessThanOrEqualTo(Integer value) {
+            addCriterion("ORDER_COMMODITY_NUM <=", value, "orderCommodityNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderCommodityNumIn(List<Integer> values) {
+            addCriterion("ORDER_COMMODITY_NUM in", values, "orderCommodityNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderCommodityNumNotIn(List<Integer> values) {
+            addCriterion("ORDER_COMMODITY_NUM not in", values, "orderCommodityNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderCommodityNumBetween(Integer value1, Integer value2) {
+            addCriterion("ORDER_COMMODITY_NUM between", value1, value2, "orderCommodityNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderCommodityNumNotBetween(Integer value1, Integer value2) {
+            addCriterion("ORDER_COMMODITY_NUM not between", value1, value2, "orderCommodityNum");
+            return (Criteria) this;
+        }
+
+
+        public Criteria andOrderCommodityTotalIsNull() {
+            addCriterion("ORDER_COMMODITY_TOTAL is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderCommodityTotalIsNotNull() {
+            addCriterion("ORDER_COMMODITY_TOTAL is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderCommodityTotalEqualTo(Integer value) {
+            addCriterion("ORDER_COMMODITY_TOTAL =", value, "orderCommodityTotal");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderCommodityTotalNotEqualTo(Integer value) {
+            addCriterion("ORDER_COMMODITY_TOTAL <>", value, "orderCommodityTotal");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderCommodityTotalGreaterThan(Integer value) {
+            addCriterion("ORDER_COMMODITY_TOTAL >", value, "orderCommodityTotal");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderCommodityTotalGreaterThanOrEqualTo(Integer value) {
+            addCriterion("ORDER_COMMODITY_TOTAL >=", value, "orderCommodityTotal");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderCommodityTotalLessThan(Integer value) {
+            addCriterion("ORDER_COMMODITY_TOTAL <", value, "orderCommodityTotal");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderCommodityTotalLessThanOrEqualTo(Integer value) {
+            addCriterion("ORDER_COMMODITY_TOTAL <=", value, "orderCommodityTotal");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderCommodityTotalIn(List<Integer> values) {
+            addCriterion("ORDER_COMMODITY_TOTAL in", values, "orderCommodityTotal");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderCommodityTotalNotIn(List<Integer> values) {
+            addCriterion("ORDER_COMMODITY_TOTAL not in", values, "orderCommodityTotal");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderCommodityTotalBetween(Integer value1, Integer value2) {
+            addCriterion("ORDER_COMMODITY_TOTAL between", value1, value2, "orderCommodityTotal");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderCommodityTotalNotBetween(Integer value1, Integer value2) {
+            addCriterion("ORDER_COMMODITY_TOTAL not between", value1, value2, "orderCommodityTotal");
             return (Criteria) this;
         }
 

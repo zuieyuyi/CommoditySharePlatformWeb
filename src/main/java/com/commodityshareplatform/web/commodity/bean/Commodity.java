@@ -2,6 +2,7 @@ package com.commodityshareplatform.web.commodity.bean;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class Commodity {
@@ -15,6 +16,8 @@ public class Commodity {
     private Integer commodityNum;
 
     private Integer commodityUserId;
+
+    private BigDecimal commodityPrice;
 
     private String commodityImgSrc;
 
@@ -70,6 +73,14 @@ public class Commodity {
 
     public void setCommodityUserId(Integer commodityUserId) {
         this.commodityUserId = commodityUserId;
+    }
+
+    public BigDecimal getCommodityPrice() {
+        return commodityPrice;
+    }
+
+    public void setCommodityPrice(BigDecimal commodityPrice) {
+        this.commodityPrice = commodityPrice;
     }
 
     public String getCommodityImgSrc() {

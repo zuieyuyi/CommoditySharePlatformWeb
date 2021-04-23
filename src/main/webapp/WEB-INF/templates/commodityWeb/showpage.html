@@ -148,7 +148,7 @@
         showmain.empty();
         $.each(result,function(index,rs){
             showmain.append("<div class='showinner'>" +
-                "<a href=''>" +
+                "<a href='" + PROJECT_PATH + "/to_commoditypage?commodityId=" + rs.commodityId + "'>" +
                 "<img src='" + rs.commodityImgSrc + "' ><br>" +
                 "<span>" + rs.commodityName + "</span>" +
                 "</a></div>");

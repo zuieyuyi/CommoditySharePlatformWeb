@@ -116,9 +116,9 @@ public class UserService implements IUserService {
             criteria.andUserNameEqualTo(user.getUserName());
         }
 
-        Object parsePwd = MD5Utils.stringToMD5(user.getUserPw());
+//        Object parsePwd = MD5Utils.stringToMD5(user.getUserPw());
 
-        user.setUserPw(parsePwd.toString());
+//        user.setUserPw(parsePwd.toString());
 
         int result = userMapper.updateByExampleSelective(user,userExample);
         return result;

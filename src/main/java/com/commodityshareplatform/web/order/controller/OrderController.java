@@ -43,12 +43,18 @@ public class OrderController {
         PageHelper.startPage(pn, ps);
 
         String userId = request.getParameter("userId") == null?"":request.getParameter("userId");
+        String pubUserId = request.getParameter("pubUserId") == null?"":request.getParameter("pubUserId");
 
         //过滤条件
         OrderExample example = new OrderExample();
         OrderExample.Criteria criteria = example.createCriteria();
         if (!StringUtils.isEmpty(userId)){
             criteria.andOrderUserIdEqualTo(Integer.parseInt(userId));
+        }
+        if (!StringUtils.isEmpty(pubUserId)){
+            OrderExample.Criteria criteria1 = example.createCriteria();
+            criteria1.andOrderPubUserIdEqualTo(Integer.parseInt(pubUserId));
+            example.or(criteria1);
         }
 
         List<Order> orders = orderService.selectAllOrders(example);

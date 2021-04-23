@@ -35,7 +35,7 @@
                         <label for="commodityNum">商品数量</label>
                         <input type="number" class="form-control" id="commodityNum" name="commodityNum" placeholder="商品数量">
                     </div>
-<!--                    <span style="color:red" class="valid-commodityNum"></span>-->
+                    <span style="color:red" class="valid-commodityNum"></span>
 <!--                    <div class="form-group">-->
 <!--                        <label for="commodityUserId">发布用户</label>-->
 <!--                        <select class="form-control" id="commodityUserId" name="commodityUserId">-->
@@ -43,6 +43,11 @@
 <!--                        </select>-->
 <!--                    </div>-->
 <!--                    <span style="color:red" class="valid-commodityUserId"></span>-->
+                    <div class="form-group">
+                        <label for="commodityPrice">商品单价</label>
+                        <input type="number" class="form-control" name="commodityPrice" id="commodityPrice" placeholder="商品单价">
+                    </div>
+                    <span style="color:red" class="valid-commodityQuality"></span>
                     <div class="form-group">
                         <label for="commodityQuality">商品质量</label>
                         <input type="text" class="form-control" name="commodityQuality" id="commodityQuality" placeholder="商品质量">
@@ -94,6 +99,11 @@
                         <input id="editComNum" type="number" class="form-control" name="commodityNum" placeholder="商品数量">
                     </div>
                     <span style="color:red" class="valid-commodityNum"></span>
+                    <div class="form-group">
+                        <label for="editComPrice">商品单价</label>
+                        <input type="number" class="form-control" name="commodityPrice" id="editComPrice" placeholder="商品单价">
+                    </div>
+                    <span style="color:red" class="valid-commodityPrice"></span>
 <!--                    <div class="form-group">-->
 <!--                        <label for="editComUserId">发布用户</label>-->
 <!--                        <select id="editComUserId" class="form-control" name="commodityUserId">-->
@@ -197,6 +207,15 @@
                             <td>邮箱:</td>
                             <td>
                                 <input id="emailText" type="text"/>
+                            </td>
+                            <td>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>用户收件地址:</td>
+                            <td>
+                                <input id="userAddr" type="text"/>
                             </td>
                             <td>
 
@@ -371,8 +390,8 @@
                         $("#userId").val(person.userId);
                         $("#userName").val(person.userName);
                         $("#emailText").val(person.userEmail);
+                        $("#userAddr").val(person.userAddr);
                     }
-
                 }else{
                     alert(data.msg);
                 }
@@ -385,6 +404,7 @@
         var userId = $("#userId").val();
         var userName = $("#userName").val();
         var userEmail = $("#emailText").val();
+        var userAddr = $("#userAddr").val();
         var newPwd = $("#newPwd").val();
         var oldPwd = $("#oldPwd").val();
         //解析旧密码
@@ -402,10 +422,10 @@
                     if (parsePwd == data.data.userPw){
                         if (validate(userId,userName,userEmail,newPwd)){
                             $.ajax({
-                                url : PROJECT_PATH + "/user/user",
+                                url : PROJECT_PATH + "/user/password",
                                 dataType : "json",
                                 type : "post",
-                                data : {"_method":"put","userId":userId,"userName":userName,"userEmail":userEmail,"userPw":newPwd},
+                                data : {"userId":userId,"userName":userName,"userEmail":userEmail,"userAddr":userAddr,"userPw":newPwd},
                                 sync : false,
                                 success : function(data){
                                     if(data.code == 10000){
@@ -584,6 +604,7 @@
         var commodityName = $("#commodityName").val();
         var commodityStatus = $("#commodityStatus").val();
         var commodityNum = $("#commodityNum").val();
+        var commodityPrice = $("#commodityPrice").val();
         var commodityQuality = $("#commodityQuality").val();
 
         $.ajax({
@@ -593,6 +614,7 @@
             data: {"commodityName":commodityName,
                 "commodityStatus":commodityStatus,
                 "commodityNum":commodityNum,
+                "commodityPrice":commodityPrice,
                 "commodityUserId":USERID,
                 "commodityQuality":commodityQuality},
             success: function(result){
@@ -615,6 +637,7 @@
         var commodityName = $("#editComName").val();
         var commodityStatus = $("#editComStatus").val();
         var commodityNum = $("#editComNum").val();
+        var commodityPrice = $("#editComPrice").val();
         // var commodityUserId = $("#editComUserId").val();
         var commodityQuality = $("#editComQuality").val();
 
@@ -626,6 +649,7 @@
                 "commodityName":commodityName,
                 "commodityStatus":commodityStatus,
                 "commodityNum":commodityNum,
+                "commodityPrice":commodityPrice,
                 "commodityQuality":commodityQuality},
             type: "POST",
             success: function(result){
@@ -674,6 +698,7 @@
                 $("#editComId").val(commodityId);
                 $("#editComName").val(result.data.commodityName);
                 $("#editComNum").val(result.data.commodityNum);
+                $("#editComPrice").val(result.data.commodityPrice);
                 // $("#editComUserId").append(result.data.commodityName);
                 // var optionTag = $("#editComUserId")
 
@@ -803,7 +828,7 @@
     function toOrderPage(pn) {
         $.ajax({
             url: PROJECT_PATH + "/order/orderss",
-            data: {"pn":pn,"userId":USERID},
+            data: {"pn":pn,"userId":USERID,"pubUserId":USERID},
             type: "get",
             success: function (result) {
                 // console.log(result);

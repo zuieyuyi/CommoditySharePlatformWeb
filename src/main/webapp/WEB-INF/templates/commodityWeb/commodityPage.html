@@ -12,6 +12,49 @@
 </style>
 
 <body style="background-image: url('/CommoditySharePlatformWeb_war/static/img/indexbg.jpg');" >
+<!-- 出租商品模态框 -->
+    <div class="modal fade" tabindex="-1" role="dialog" id="leaseCommodity">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">租借商品</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label class="control-label">商品名:</label>
+                            <span id="commodityName"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="orderBeginRentTime" class="control-label">租借开始:</label>
+                            <input type="date" class="form-control" id="orderBeginRentTime" onblur="total()">
+                        </div>
+                        <div class="form-group">
+                            <label for="orderEndRentTime" class="control-label">租借结束:</label>
+                            <input type="date" class="form-control" id="orderEndRentTime" onblur="backTime();total();">
+                        </div>
+                        <div class="form-group"><!-- 默认为结束时间次日 -->
+                            <label for="orderBackTime" class="control-label">返还时间:</label>
+                            <span id="orderBackTime"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="commodityNum" class="control-label">租借数量:</label>
+                            <input type="number" class="form-control" id="commodityNum" onblur="total()">
+                        </div>
+                        <div class="form-group">
+                            <label for="commodityTotal" class="control-label">商品总价:</label>
+                            <span id="commodityTotal"></span>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" onclick="lease()">确认租借</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
     <div id="bgbox" >
         <!-- 顶部栏 -->
         <div th:replace="~{/commons/head::head}"></div>
@@ -123,7 +166,7 @@
                         <div id="commodityImg"></div>
                         <div id="commodityMsg"></div>
                         <div id="leaseBox">
-                            
+                            <input type="button" class="btn btn-success" data-toggle="modal" data-target="#leaseCommodity" value="租借"/>
                         </div>
                     </div>
                 </div>
@@ -178,11 +221,20 @@
         //生成图片
         commodityImg.append("<img stlye='width: 1200px; height: 500px' src='../img/game_detail.png' />");
         //生成内容
+        var comUserId = $("<input id='comUserId' type='hidden' value='" + commodity.commodityUserId + "'/>");
+        var comId = $("<input id='comId' type='hidden' value='" + commodity.commodityId + "'/>");
         var comStatus = $("<div><span>商品状态:</span><span>" + commodity.commodityStatusMsg + "</span></div>");
-        var comNum = $("<div><span>商品数量:</span><span>" + commodity.commodityNum + "</span></div>");
+        var comNum = $("<div><span>商品数量:</span><span id='comNum'>" + commodity.commodityNum + "</span></div>");
         var comQuality = $("<div><span>商品质量:</span><span>" + commodity.commodityQuality + "</span></div>");
+        var commodityPrice = $("<div><span>商品单价:</span><span id='comPrice'>" + commodity.commodityPrice + "元</span></div>");
         var comTag = $("<div><span>商品类型标签:</span><span>" + commodity.commodityTag + "</span></div>");
-        commodityMsg.append(comStatus).append(comNum).append(comQuality).append(comTag);
+
+        commodityMsg.append(comId).append(comUserId).append(comStatus).append(comNum).append(comQuality).append(commodityPrice).append(comTag);
+
+        //租借模态框内容显示
+        $("#commodityName").append(commodity.commodityName);
+        $("#commodityNum").val(1);
+        $("#commodityTotal").append(commodity.commodityPrice);
     }
 
     //获取商品的评论
@@ -260,6 +312,119 @@
                 }
             }
         });
+    }
+
+    //计算返还时间
+    function backTime(){
+        // var orderBeginRentTime = $("#orderBeginRentTime").val();
+        var orderEndRentTime = $("#orderEndRentTime").val();
+        var orderBackTimeElm = $("#orderBackTime");
+        var day = 1*1000*60*60*24;
+
+        var date = new Date(orderEndRentTime).getTime();
+
+        if (orderEndRentTime != null || orderEndRentTime != undefined || orderEndRentTime != ""){
+            orderBackTimeElm.empty();
+            var backTime = new Date();
+            backTime.setTime(date + day);
+            orderBackTimeElm.append(backTime.getFullYear() + "/" + (backTime.getMonth()+1) + "/" + backTime.getDate());
+        }
+    }
+    //计算商品总价
+    function total(){ /* 天数*单价*数量 */
+        var orderBeginRentTime = $("#orderBeginRentTime").val();
+        var orderEndRentTime = $("#orderEndRentTime").val();
+        var commodityNum = $("#commodityNum").val(); /* 数量 */
+        var commodityPrice = $("#comPrice").text().trim(); /* 单价 */
+        var day = 1;/* 天数 */
+
+        if ((orderBeginRentTime != null || orderBeginRentTime != undefined || orderBeginRentTime != "")
+        && (orderEndRentTime != null || orderEndRentTime != undefined || orderEndRentTime != "")){
+            var beginTime = new Date(orderBeginRentTime).getTime();
+            var endTime = new Date(orderEndRentTime).getTime();
+
+            if (beginTime< endTime){
+                day = (endTime - beginTime)/1000/60/60/24;
+            }
+        }
+
+        var total = parseInt(commodityNum)*day*parseInt(commodityPrice);
+
+        $("#commodityTotal").empty();
+        $("#commodityTotal").append(total+"元");
+
+    }
+
+    //租借请求
+    function lease(){
+        if(validate()){
+            var orderBeginRentTime = $("#orderBeginRentTime").val();
+            var orderEndRentTime = $("#orderEndRentTime").val();
+            var commodityNum = $("#commodityNum").val(); /* 数量 */
+            var commodityPrice = $("#comPrice").text().trim().replace("元",""); /* 单价 */
+            var orderPubUser = $("#comUserId").val();
+            var orderCommodityId = $("#comId").val();
+            $.ajax({
+                url : PROJECT_PATH + "/transaction/lease",
+                dataType : "json",
+                type : "post",
+                data : {
+                    "orderBeginRentTime":orderBeginRentTime,
+                    "orderEndRentTime":orderEndRentTime,
+                    "orderCommodityNum":commodityNum,
+                    "commodityPrice":commodityPrice,
+                    "orderPubUser":orderPubUser,
+                    "orderCommodityId":orderCommodityId,
+                },
+                sync : false,
+                success : function(data){
+                    if(data.code == 10000){
+                        alert("租借成功");
+                        window.location.href = PROJECT_PATH + "/to_commoditypage?commodityId=" + orderCommodityId;
+                    }else{
+                        alert(data.msg);
+                    }
+                }
+            });
+        }
+    }
+
+    //数据校验
+    function validate(){
+        var orderBeginRentTime = $("#orderBeginRentTime").val();
+        var orderEndRentTime = $("#orderEndRentTime").val();
+        var commodityNum = $("#commodityNum").val();
+        var comNum = $("#comNum").text();
+        var now = new Date();
+
+        var beginTime = null;
+        if (orderBeginRentTime != null || orderBeginRentTime != undefined || orderBeginRentTime != ""){
+            beginTime = new Date(orderBeginRentTime);
+        }else return false;
+
+        var endTime = null;
+        if (orderEndRentTime != null || orderEndRentTime != undefined || orderEndRentTime != ""){
+            endTime = new Date(orderBeginRentTime);
+        }else return false;
+
+        if (beginTime.getTime() > endTime.getTime()){
+            alert("开始时间不能小于结束时间");
+            return false;
+        }
+        if ((beginTime.getTime() < now.getTime()) || (endTime.getTime() < now.getTime())){
+            alert("开始和结束时间不能小于当前时间时间");
+            return false;
+        }
+
+        if (commodityNum == null || commodityNum == undefined || commodityNum == ""){
+            alert("请设置商品数量");
+            return false;
+        }
+        if (parseInt(commodityNum) > parseInt(comNum)){
+            alert("商家没有那么多商品");
+            return false;
+        }
+        return true;
     }
 
     /*]]>*/

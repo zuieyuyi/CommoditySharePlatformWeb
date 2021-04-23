@@ -65,9 +65,9 @@ public class OrderService implements IOrderService {
                 if (user.getUserId()==order.getOrderPubUserId()){
                     order.setOrderPubUserName(user.getUserName());
                 }
-                if ((!"".equals(order.getOrderUserName()))&&(!"".equals(order.getOrderPubUserName()))){
-                    break;
-                }
+//                if ((!"".equals(order.getOrderUserName()))&&(!"".equals(order.getOrderPubUserName()))){
+//                    break;
+//                }
             }
 
             for (Commodity commodity:commodities){

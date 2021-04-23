@@ -3,6 +3,7 @@ package com.commodityshareplatform.web.order.bean;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class Order extends OrderKey {
@@ -13,6 +14,10 @@ public class Order extends OrderKey {
     private Integer orderUserId;
 
     private Integer orderCommodityId;
+
+    private Integer orderCommodityNum;
+
+    private BigDecimal orderCommodityTotal;
 
     private String orderName;
 
@@ -81,6 +86,22 @@ public class Order extends OrderKey {
     @Override
     public void setOrderCommodityId(Integer orderCommodityId) {
         this.orderCommodityId = orderCommodityId;
+    }
+
+    public Integer getOrderCommodityNum() {
+        return orderCommodityNum;
+    }
+
+    public void setOrderCommodityNum(Integer orderCommodityNum) {
+        this.orderCommodityNum = orderCommodityNum;
+    }
+
+    public BigDecimal getOrderCommodityTotal() {
+        return orderCommodityTotal;
+    }
+
+    public void setOrderCommodityTotal(BigDecimal orderCommodityTotal) {
+        this.orderCommodityTotal = orderCommodityTotal;
     }
 
     public String getOrderName() {

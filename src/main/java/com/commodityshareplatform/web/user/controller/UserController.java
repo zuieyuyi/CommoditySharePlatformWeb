@@ -3,6 +3,7 @@ package com.commodityshareplatform.web.user.controller;
 import com.commodityshareplatform.web.user.bean.User;
 import com.commodityshareplatform.web.user.bean.UserExample;
 import com.commodityshareplatform.web.user.server.IUserService;
+import com.commodityshareplatform.web.utils.MD5Utils;
 import com.commodityshareplatform.web.utils.Result;
 import com.commodityshareplatform.web.utils.ResultUtils;
 import com.github.pagehelper.PageHelper;
@@ -122,6 +123,19 @@ public class UserController {
     @ResponseBody
     public Result deleteUser(@PathVariable("userId") Integer userId){
         Integer result = userService.deleteUserById(userId);
+        if (result != null){
+            return ResultUtils.success();
+        }else{
+            return ResultUtils.error(-1,"用户保存失败");
+        }
+    }
+
+    @RequestMapping(value = "password",method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveUserPassword(User user){
+        Object parsePwd = MD5Utils.stringToMD5(user.getUserPw());
+        user.setUserPw(parsePwd.toString());
+        Integer result = userService.updateUser(user);
         if (result != null){
             return ResultUtils.success();
         }else{
