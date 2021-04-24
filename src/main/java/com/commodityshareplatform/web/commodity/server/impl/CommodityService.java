@@ -173,7 +173,7 @@ public class CommodityService implements ICommodityService {
         CommodityExample commodityExample = new CommodityExample();
         CommodityExample.Criteria criteria = commodityExample.createCriteria();
         criteria.andCommodityIdEqualTo(commodity.getCommodityId());
-        int result = commodityMapper.updateByExample(commodity, commodityExample);
+        int result = commodityMapper.updateByExampleSelective(commodity, commodityExample);
         return result;
     }
 

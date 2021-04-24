@@ -133,8 +133,8 @@ public class UserService implements IUserService {
     @Override
     public Integer insertUser(User user) {
         user.setUserCreateDate(new Date());
-        Object parsePwd = MD5Utils.stringToMD5(user.getUserPw());
-        user.setUserPw(parsePwd.toString());
+//        Object parsePwd = MD5Utils.stringToMD5(user.getUserPw());
+//        user.setUserPw(parsePwd.toString());
         int result = userMapper.insertSelective(user);
         return result;
     }

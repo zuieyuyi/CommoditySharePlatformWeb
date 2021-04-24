@@ -150,7 +150,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick="saveTags()">保存标签</button>
+                <button id="saveTagsBtn" type="button" class="btn btn-primary" >保存标签</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
@@ -573,11 +573,11 @@
                 .append($("<span></span>").addClass("glyphicon glyphicon-trash")).append("删除").attr("data-info",item.commodityId);
 
             //添加标签按钮
-            var AddTagBtnTd = $("<button></button>").addClass("btn btn-success btn-sm add_tag_btn com_add_tag_but").attr("aria-hidden", "true")
+            var addTagBtnTd = $("<button></button>").addClass("btn btn-success btn-sm add_tag_btn com_add_tag_but").attr("aria-hidden", "true")
                 .append($("<span></span>").addClass("glyphicon glyphicon-pencil")).append("添加标签").attr("data-info",item.commodityId)
                 .attr("data-toggle","modal").attr("data-target","#saveTagModal");
 
-            comOperateElm.append(editButTd).append(" ").append(delButTd).append(" ").append(AddTagBtnTd);
+            comOperateElm.append(editButTd).append(" ").append(delButTd).append(" ").append(addTagBtnTd);
 
             $("<tr></tr>").append(comIdElm).append(comNameElm).append(comStatusElm)
                 .append(comNumElm).append(comUserElm).append(comQualityElm).append(comCreateDateElm).append(comOperateElm)
@@ -770,8 +770,8 @@
     // }
 
     //发送保存标签信息请求
-    function saveTags(){
-        var commodityId = $("#commodityId").text();
+    function saveTags(commodityId){
+        // var commodityId = $("#commodityId").text();
         var  tagarr = $(".class-tag");
         var tags = "";
         $.each(tagarr,function(index,tag){
@@ -783,7 +783,7 @@
         });
 
         $.ajax({
-            url:PROJECT_PATH+"/admin/commodityTags/"+commodityId,
+            url:PROJECT_PATH+"/commodity/commodityTags/"+commodityId,
             dataType: "json",
             type:"post",
             data:{"_method":"PUT",
@@ -793,15 +793,20 @@
                 $("#saveTagModal").modal("hide");
                 alert("保存标签成功");
                 //刷新当前页
-                window.location.href = PROJECT_PATH + "/admin/to_commodity_select/" + commodityId;
+                window.location.href = PROJECT_PATH + "/to_mypage";
             }
         });
     }
 
     //发送请求获取并添加标签模态框元素
     function getTags(commodityId){
+        // onclick="saveTags()"
+        //给保存标签按钮添加事件
+        $("#saveTagsBtn").removeAttr("onclick");
+        $("#saveTagsBtn").attr("onclick","saveTags(" + commodityId + ")");
+
         $.ajax({
-            url: PROJECT_PATH+"/admin/commodityTags/"+commodityId,
+            url: PROJECT_PATH+"/commodity/commodityTags/"+commodityId,
             dataType: "json",
             type:"get",
             success:function(result){

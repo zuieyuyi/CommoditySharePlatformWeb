@@ -8,11 +8,11 @@
       This element was generated on Fri Feb 12 16:54:45 CST 2021.
     -->
     <id column="ORDER_ID" jdbcType="INTEGER" property="orderId" />
-    <id column="ORDER_PUB_USER_ID" jdbcType="INTEGER" property="orderPubUserId" />
-    <id column="ORDER_USER_ID" jdbcType="INTEGER" property="orderUserId" />
-    <id column="ORDER_COMMODITY_ID" jdbcType="INTEGER" property="orderCommodityId" />
-    <id column="ORDER_COMMODITY_NUM" jdbcType="INTEGER" property="orderCommodityId" />
-    <id column="ORDER_COMMODITY_TOTAL" jdbcType="DECIMAL" property="orderCommodityTotal" />
+    <result column="ORDER_PUB_USER_ID" jdbcType="INTEGER" property="orderPubUserId" />
+    <result column="ORDER_USER_ID" jdbcType="INTEGER" property="orderUserId" />
+    <result column="ORDER_COMMODITY_ID" jdbcType="INTEGER" property="orderCommodityId" />
+    <result column="ORDER_COMMODITY_NUM" jdbcType="INTEGER" property="orderCommodityNum" />
+    <result column="ORDER_COMMODITY_TOTAL" jdbcType="DECIMAL" property="orderCommodityTotal" />
     <result column="ORDER_NAME" jdbcType="VARCHAR" property="orderName" />
     <result column="ORDER_CODE" jdbcType="VARCHAR" property="orderCode" />
     <result column="ORDER_STATUS" jdbcType="INTEGER" property="orderStatus" />
