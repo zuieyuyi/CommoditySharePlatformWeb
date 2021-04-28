@@ -219,7 +219,7 @@
         //生成标题
         $("#innertitle").append(commodity.commodityName);
         //生成图片
-        commodityImg.append("<img stlye='width: 1200px; height: 500px' src='../img/game_detail.png' />");
+        commodityImg.append("<img stlye='width: 1200px; height: 500px' src='" + PROJECT_PATH + commodity.commodityImgSrc + "' />");
         //生成内容
         var comUserId = $("<input id='comUserId' type='hidden' value='" + commodity.commodityUserId + "'/>");
         var comId = $("<input id='comId' type='hidden' value='" + commodity.commodityId + "'/>");
@@ -264,7 +264,7 @@
         var communicationbox = $("#communicationbox");
         communicationbox.empty();
         //生成发表篇评论元素
-        var talkbox = $("<div id=\"talkbox\" ><div id=\"talktext\"><textarea placeholder=\"请文明用语\" ></textarea></div><div id=\"talkbut\"><input type=\"button\" class=\"btn btn-default\" onclick='postComment()' value=\"发送\"></div></div>")
+        var talkbox = $("<div id=\"talkbox\" class='row'><div id=\"talktext\" class='col9'><textarea placeholder=\"请文明用语\" ></textarea></div><div id=\"talkbut\" class='col-3'><input type=\"button\" class=\"btn btn-default\" onclick='postComment()' value=\"发送\"></div></div>")
         communicationbox.append(talkbox);
         //生成讨论信息元素
         $.each(comments,function(index,comment){

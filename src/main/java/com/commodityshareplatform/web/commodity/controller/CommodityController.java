@@ -7,15 +7,19 @@ import com.commodityshareplatform.web.utils.Result;
 import com.commodityshareplatform.web.utils.ResultUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.thymeleaf.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -101,7 +105,38 @@ public class CommodityController {
      */
     @RequestMapping(value = "commodity",method = RequestMethod.POST)
     @ResponseBody
-    public Result<Commodity> addCommodity(Commodity commodity){
+    public Result<Commodity> addCommodity(Commodity commodity,HttpServletRequest request){
+        String contextPath = request.getServletContext().getRealPath("/uploadFile");
+        Date date = new Date();
+        File imgPath = new File(contextPath + "/" + commodity.getCommodityUserId());
+        File[] files = imgPath.listFiles();
+        if (files.length == 0){
+            return ResultUtils.error(-1,"请上传文件");
+        }
+        File img = null;
+        for (File f: files){
+            if (f.isFile()){
+                img = f;
+                break;
+            }
+        }
+        File imgToDir = new File(imgPath.getPath() + "/" + date.getTime());//转移图片路径
+        File img2 =  new File(imgToDir.getPath() + "/" + img.getName());
+
+        //创建文件目录
+        if (!imgToDir.exists()){
+            imgToDir.mkdirs();
+        }
+        //**
+        try {
+            FileUtils.copyFile(img,img2);
+            img.delete();
+        } catch (IOException e) {
+            return ResultUtils.error(-1,"图片添加失败");
+        }
+
+        commodity.setCommodityImgSrc("/uploadFile/" + commodity.getCommodityUserId() + "/" + date.getTime() + "/" + img2.getName());
+        //**
         Integer result = commodityService.insertCommodity(commodity);
         if (result != null){
             return ResultUtils.success();
@@ -192,4 +227,40 @@ public class CommodityController {
         return ResultUtils.success(tagSet);
     }
 
+    /**
+     * 保存图片
+     * @param file
+     * @return
+     */
+    @RequestMapping(value = "imgUpload",method = RequestMethod.POST)
+    @ResponseBody
+    public Result save(@RequestParam("file") MultipartFile file,HttpServletRequest request) throws IOException {
+        String contextPath = request.getServletContext().getRealPath("/uploadFile");
+        //根据文件创建目录
+        String userId = request.getParameter("userId") == null?"":request.getParameter("userId");
+//        String commodityId = request.getParameter("commodityId") == null?"":request.getParameter("commodityId");
+        File dir = null;
+        if (!StringUtils.isEmpty(userId)){
+            dir = new File(contextPath+"\\"+userId);
+            if (!dir.exists()){
+                dir.mkdirs();
+                contextPath += "\\" + userId;
+            }
+        }
+//        if (!StringUtils.isEmpty(commodityId)){
+//
+//        }
+
+        // 保存图片的路径，图片上传成功后，将路径保存到数据库
+//        String filePath = "F:\\upload";
+//         获取原始图片的扩展名
+        String originalFilename = file.getOriginalFilename();
+        // 生成文件新的名字
+        String newFileName = UUID.randomUUID() + originalFilename;
+        // 封装上传文件位置的全路径
+        File targetFile = new File(dir, newFileName);
+        file.transferTo(targetFile);
+
+        return ResultUtils.success();
+    }
 }

@@ -3,6 +3,8 @@ package com.commodityshareplatform.web.index.controller;
 import com.commodityshareplatform.web.commodity.bean.Commodity;
 import com.commodityshareplatform.web.commodity.bean.CommodityExample;
 import com.commodityshareplatform.web.commodity.server.ICommodityService;
+import com.commodityshareplatform.web.enuminfo.CommodityStatusEnum;
+import com.commodityshareplatform.web.enuminfo.OrderStatusEnum;
 import com.commodityshareplatform.web.order.bean.Order;
 import com.commodityshareplatform.web.order.server.IOrderService;
 import com.commodityshareplatform.web.user.bean.User;
@@ -87,7 +89,7 @@ public class TransactionController {
             return ResultUtils.error(-1,"卖家或者卖家未设置地址");
         }
 
-        //订单状态orderStatus默认为1支付中
+        //订单状态orderStatus默认为2
         Order order = new Order();
         order.setOrderPubUserId(Integer.parseInt(orderPubUser));
         order.setOrderUserId(orderUser);
@@ -96,7 +98,7 @@ public class TransactionController {
         order.setOrderEndRentTime(endTime);
         order.setOrderCommodityNum(Integer.parseInt(orderCommodityNum));
         order.setOrderBackTime(backTime);
-        order.setOrderStatus(1);
+        order.setOrderStatus(OrderStatusEnum.NO_TAKE_RECEIPT.getStatusCode());
         BigDecimal total = new BigDecimal(orderCommodityTotal);
         order.setOrderCommodityTotal(total);
         order.setOrderAddr(user.getUserAddr());
@@ -106,6 +108,10 @@ public class TransactionController {
         //2、修改商品数量
         Commodity commodity = commodityService.selectCommodityById(Integer.parseInt(orderCommodityId));
         commodity.setCommodityNum(commodity.getCommodityNum() - Integer.parseInt(orderCommodityNum));
+        //如果商品为0则状态变为售罄
+        if (commodity.getCommodityNum() - Integer.parseInt(orderCommodityNum) == 0){
+            commodity.setCommodityStatus(CommodityStatusEnum.SELL_OUT.getStatusCode());
+        }
         commodityService.updateCommodity(commodity);
 
         //3、修改用户金额数量
@@ -123,4 +129,37 @@ public class TransactionController {
 
         return ResultUtils.success();
     }
+
+//    /**
+//     * 未确认出租商品
+//     * @return
+//     */
+//    @RequestMapping(value = "/unlease",method = RequestMethod.POST)
+//    @ResponseBody
+//    @Transactional(propagation = Propagation.REQUIRES_NEW,
+//            isolation = Isolation.READ_COMMITTED,
+//            readOnly = false,
+//            timeout = 2,
+//            rollbackFor = {Exception.class})
+//    public Result unlease(){
+//        //修改订单状态为商家未确认出租
+//        //将钱退还给用户
+//    }
+
+//    /**
+//     * 确认收货
+//     * @return
+//     */
+//    @RequestMapping(value = "/receipt",method = RequestMethod.POST)
+//    @ResponseBody
+//    @Transactional(propagation = Propagation.REQUIRES_NEW,
+//            isolation = Isolation.READ_COMMITTED,
+//            readOnly = false,
+//            timeout = 2,
+//            rollbackFor = {Exception.class})
+//    public Result takeReceipt(Order order){
+//        order.setOrderStatus(OrderStatusEnum.RENT_OUT.getStatusCode());
+//        orderService.updateOrder(order);
+//        return ResultUtils.success();
+//    }
 }

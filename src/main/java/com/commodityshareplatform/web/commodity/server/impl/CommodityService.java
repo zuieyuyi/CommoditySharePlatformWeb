@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
 import java.util.List;
@@ -152,6 +153,9 @@ public class CommodityService implements ICommodityService {
         Date createDate = new Date();
         commodity.setCommodityCreateDate(createDate);
         commodity.setIsValid(1);
+        //转运图片
+
+
         int result = commodityMapper.insertSelective(commodity);
         return result;
     }

@@ -58,6 +58,13 @@
                     <!--                        <input type="file" id="exampleInputFile">-->
                     <!--                        <p class="help-block">Example block-level help text here.</p>-->
                     <!--                    </div>-->
+                    <div class="form-group">
+                        <label for="commodityImgSrc">图片上传</label>
+                        <!--                    <input type="file" id="exampleInputFile" >-->
+                        <input type="file" id="commodityImgSrc" >
+                        <!--                    <p class="help-block">Example block-level help text here.</p>-->
+                        <input type="button" id="imgBtn" value="上传" onclick="uploadImg()">
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
@@ -116,11 +123,16 @@
                         <input id="editComQuality" type="text" class="form-control" name="commodityQuality" placeholder="商品质量">
                     </div>
                     <span style="color:red" class="valid-commodityQuality"></span>
-                    <!--                    <div class="form-group">-->
-                    <!--                        <label for="exampleInputFile">商品图片</label>-->
-                    <!--                        <input type="file" id="exampleInputFile">-->
-                    <!--                        <p class="help-block">Example block-level help text here.</p>-->
-                    <!--                    </div>-->
+                    <div id="showImg" class="form-group">
+
+                    </div>
+                    <div class="form-group">
+                        <label for="editComImgSrc">图片上传</label>
+                        <!--                    <input type="file" id="exampleInputFile" >-->
+                        <input type="file" id="editComImgSrc" >
+                        <!--                    <p class="help-block">Example block-level help text here.</p>-->
+                        <input type="button" id="editImgBtn" value="上传" onclick="uploadImg()">
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
@@ -367,10 +379,34 @@
     // });
 
     //订单删除按钮事件
-    $(document).on("click",".order_del_but",function () {
-        var comf = confirm("是否删除id为" + $(this).attr("data-info") + "的这个订单")
+    // $(document).on("click",".order_del_but",function () {
+    //     var comf = confirm("是否删除id为" + $(this).attr("data-info") + "的这个订单")
+    //     if (comf == true){
+    //         delOrder($(this).attr("data-info"));
+    //     }
+    // });
+
+    //确认收货按钮
+    $(document).on("click",".order_receipt_but",function () {
+        var comf = confirm("是否确认收货？");
         if (comf == true){
-            delOrder($(this).attr("data-info"));
+            orderStatusUpdate($(this).attr("data-info"),3,"收货成功");
+        }
+    });
+
+    //返还按钮order_return_but
+    $(document).on("click",".order_return_but",function () {
+        var comf = confirm("是否返还？");
+        if (comf == true){
+            orderStatusUpdate($(this).attr("data-info"),4,"返还成功");
+        }
+    });
+
+    //订单完成按钮order_over_but
+    $(document).on("click",".order_over_but",function () {
+        var comf = confirm("是否确认完成订单？");
+        if (comf == true){
+            orderStatusUpdate($(this).attr("data-info"),5,"订单完成");
         }
     });
 
@@ -605,6 +641,7 @@
         var commodityStatus = $("#commodityStatus").val();
         var commodityNum = $("#commodityNum").val();
         var commodityPrice = $("#commodityPrice").val();
+        // var commodityImgSrc = $("#commodityImg").val();
         var commodityQuality = $("#commodityQuality").val();
 
         $.ajax({
@@ -705,6 +742,8 @@
                 // $("#editComUserId").find("option[value="+result.data.commodityUserId+"]").attr("selected",'selected');
 
                 $("#editComQuality").val(result.data.commodityQuality);
+                $("#showImg").empty();
+                $("#showImg").append("<span>目前图片：</span><img style='width: 100px' src='" + PROJECT_PATH + result.data.commodityImgSrc + "'>")
                 // // $("#editComStatus").append(result.data.commodityStatus);
                 // var statusOptionTag = $("#editComStatus>option");
                 // console.log(statusOptionTag);
@@ -821,6 +860,8 @@
 
     //生成模板元素
     function buildTagsElm(tagsArr){
+        var tagTable = $("#tagInfo");
+        tagTable.empty();
         $.each(tagsArr,function(index, tag){
             addTagElm(tag);
         });
@@ -837,11 +878,8 @@
             type: "get",
             success: function (result) {
                 // console.log(result);
-                //1、解析并显示用户数据
                 buildOrderTable(result);
-                //2、解析并显示分页数据
-                // buildOrderPageInfo(result);
-                //3、解析并显示分页条数据
+                buildOrderPageInfo(result);
                 // buildPageNav(result,"#page_info_nav_order",toOrderPage);
                 buildPage(result.data,"#cutpage",toOrderPage);
             }
@@ -849,13 +887,13 @@
     }
     //1、解析并显示订单数据
     function buildOrderTable(result) {
-        var users = result.data.list
+        var orders = result.data.list
 
         var tbody = $("#orders_table>tbody");
 
         //清空数据
         tbody.empty();
-        $.each(users, function (index, item) {
+        $.each(orders, function (index, item) {
             // var checkBox = $("<td><input type='checkbox' class='check_item'/></td>");
             // var orderIdElm = $("<td></td>").append(item.orderId);
             var orderUserNameElm = $("<td></td>").append(item.orderUserName);
@@ -870,10 +908,23 @@
             var orderBackTimeElm = $("<td></td>").append(item.orderBackTime);
 
 
-            var userOperateElm = $("<td></td>").append();
+            var orderOperateElm = $("<td></td>").append();
             //查看按钮
-            var selectButTd = $("<button></button>").addClass("btn btn-success btn-sm select_btn order_select_but").attr("aria-hidden", "true")
-                .append($("<span></span>").addClass("glyphicon glyphicon-pencil")).append("查看").attr("data-info",item.orderId);
+            // var selectButTd = $("<button></button>").addClass("btn btn-success btn-sm select_btn order_select_but").attr("aria-hidden", "true")
+            //     .append($("<span></span>").addClass("glyphicon glyphicon-pencil")).append("查看").attr("data-info",item.orderId);
+
+            //确认收货按钮
+            var takeReceiptButTd = $("<button></button>").addClass("btn btn-success btn-sm order_receipt_but").attr("aria-hidden", "true")
+                .append($("<span></span>").addClass("glyphicon glyphicon-pencil")).append("确认收货").attr("data-info",item.orderId);
+
+            //返还按钮
+            var returnButTd = $("<button></button>").addClass("btn btn-primary btn-sm order_return_but").attr("aria-hidden", "true")
+                .append($("<span></span>").addClass("glyphicon glyphicon-pencil")).append("返还").attr("data-info",item.orderId);
+
+            //完成订单
+            var returnOverButTd = $("<button></button>").addClass("btn btn-danger btn-sm order_over_but").attr("aria-hidden", "true")
+                .append($("<span></span>").addClass("glyphicon glyphicon-pencil")).append("完成订单").attr("data-info",item.orderId);
+
 
             //编辑按钮
             // var editButTd = $("<button></button>").addClass("btn btn-primary btn-sm edit_btn order_edit_but").attr("aria-hidden", "true")
@@ -881,30 +932,66 @@
             //     .attr("data-toggle","modal").attr("data-target","#update_order_modal");
 
             //删除按钮
-            var delButTd = $("<button></button>").addClass("btn btn-danger btn-sm delete_btn order_del_but").attr("aria-hidden", "true")
-                .append($("<span></span>").addClass("glyphicon glyphicon-trash")).append("删除").attr("data-info",item.orderId);
+            // var delButTd = $("<button></button>").addClass("btn btn-danger btn-sm delete_btn order_del_but").attr("aria-hidden", "true")
+            //     .append($("<span></span>").addClass("glyphicon glyphicon-trash")).append("删除").attr("data-info",item.orderId);
 
-            userOperateElm.append(selectButTd).append(" ").append(delButTd);
+            if (item.orderPubUserName == USERNAME && item.orderStatus == 9){
+                orderOperateElm.append(takeReceiptButTd);
+            }
 
-            $("<tr></tr>").append(orderPubUserNameElm).append(orderUserNameElm).append(orderCommodityNameElm)
+            if (item.orderUserName == USERNAME && item.orderStatus == 3){
+                orderOperateElm.append(returnButTd);
+            }
+
+            if (item.orderPubUserName == USERNAME && item.orderStatus == 4){
+                orderOperateElm.append(returnOverButTd);
+            }
+
+            // userOperateElm.append(selectButTd).append(" ").append(delButTd);
+
+            $("<tr></tr>").append(orderUserNameElm).append(orderPubUserNameElm).append(orderCommodityNameElm)
                 .append(orderStatusElm)
-                .append(orderBeginRentTimeElm).append(orderEndRentTimeElm).append(orderBackTimeElm)
+                .append(orderBeginRentTimeElm).append(orderEndRentTimeElm).append(orderBackTimeElm).append(orderOperateElm)
                 .appendTo(tbody);
         });
     }
-    //2、解析并显示分页数据
-    function buildOrderPageInfo(result) {
-        var pageInfo = result.data
-        //清空数据
-        // $("#page_info_msg").empty();
-        // // 当前第 页，总共 页,总共 条记录
-        // $("#page_info_msg").append("当前第" + pageInfo.pageNum +
-        //     "页，总共" + pageInfo.pages +
-        //     "页,总共" + pageInfo.total + "条记录");
-        //记录数全局变量
-        ordertotalrecord = pageInfo.total;
-        //当前页
-        ordercurrentNum = pageInfo.pageNum;
+
+    //确认收货
+    // function takeReceipt(orderId){
+    //     $.ajax({
+    //         url: PROJECT_PATH+"/order/order",
+    //         data: {"_method":"PUT","orderId":orderId,"orderStatus":3},
+    //         type: "POST",
+    //         success: function (result) {
+    //             if (result.code == 10000){
+    //                 //弹窗提示删除成功
+    //                 alert("收货成功");
+    //                 //刷新页面
+    //                 toOrderPage(ordercurrentNum);
+    //             }else{
+    //                 alert(result.msg);
+    //             }
+    //         }
+    //     });
+    // }
+
+    //修改订单状态
+    function orderStatusUpdate(orderId,orderStatus,msg){
+        $.ajax({
+            url: PROJECT_PATH+"/order/order",
+            data: {"_method":"PUT","orderId":orderId,"orderStatus":orderStatus},
+            type: "POST",
+            success: function (result) {
+                if (result.code == 10000){
+                    //弹窗提示删除成功
+                    alert(msg);
+                    //刷新页面
+                    toOrderPage(ordercurrentNum);
+                }else{
+                    alert(result.msg);
+                }
+            }
+        });
     }
 
     function dateReplace(date){
@@ -928,8 +1015,28 @@
                     alert(result.msg);
                 }
             }
-        })
+        });
     }
+    //2、解析并显示分页数据
+    function buildOrderPageInfo(result) {
+        var pageInfo = result.data
+        //清空数据
+        // $("#page_info_msg").empty();
+        // // 当前第 页，总共 页,总共 条记录
+        // $("#page_info_msg").append("当前第" + pageInfo.pageNum +
+        //     "页，总共" + pageInfo.pages +
+        //     "页,总共" + pageInfo.total + "条记录");
+        //记录数全局变量
+        ordertotalrecord = pageInfo.total;
+        //当前页
+        ordercurrentNum = pageInfo.pageNum;
+    }
+
+    function dateReplace(date){
+        // date.replace("/","-");
+        return date;
+    }
+
     /* 订单列表模块 */
 
     /* 分页功能 */
@@ -1055,6 +1162,39 @@
             });
         }
         cutpage.append(nextPage).append(lastPage);
+    }
+
+    //图片上传
+    function uploadImg() {
+        //获取文件对象以及其他参数
+        var file = $("#commodityImgSrc")[0].files[0];
+        var type = file.name.substr(file.name.lastIndexOf("."),file.name.length);
+
+        if(type!=".jpg"&&type!=".gif"&&type!=".jpeg"&& type!=".png"){
+            alert("您上传图片的类型不符合(.jpg|.jpeg|.gif|.png)！");
+            return false;
+        }
+
+        var formData = new FormData();
+        formData.append("file",file);
+        formData.append("userId",USERID);
+
+        $.ajax({
+            url : PROJECT_PATH + '/commodity/imgUpload',
+            type : 'post',
+            dataType : 'json',
+            data : formData,
+            cache: false,   //上传文件无需缓存
+            processData: false,   // 用于对参数进行序列化处理，这里必须设为false
+            contentType:false, // 必须
+            success : function(result) {
+                if (result.code == 10000){
+                    alert("上传成功");
+                }else{
+                    alert(result.msg);
+                }
+            }
+        });
     }
     /*]]>*/
 </script>

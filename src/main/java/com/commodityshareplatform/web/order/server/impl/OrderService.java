@@ -54,6 +54,14 @@ public class OrderService implements IOrderService {
                 order.setOrderStatusMsg(OrderStatusEnum.RETURN.getStatus());
             }else if (order.getOrderStatus() == OrderStatusEnum.RETURN_OVER.getStatusCode()){
                 order.setOrderStatusMsg(OrderStatusEnum.RETURN_OVER.getStatus());
+            }else if (order.getOrderStatus() == OrderStatusEnum.NO_TAKE_DELIVERY.getStatusCode()){
+                order.setOrderStatusMsg(OrderStatusEnum.NO_TAKE_DELIVERY.getStatus());
+            }else if (order.getOrderStatus() == OrderStatusEnum.NO_RETURN.getStatusCode()){
+                order.setOrderStatusMsg(OrderStatusEnum.NO_RETURN.getStatus());
+            }else if (order.getOrderStatus() == OrderStatusEnum.TAKE_RECEIPT.getStatusCode()){
+                order.setOrderStatusMsg(OrderStatusEnum.TAKE_RECEIPT.getStatus());
+            }else if (order.getOrderStatus() == OrderStatusEnum.NO_TAKE_RECEIPT.getStatusCode()){
+                order.setOrderStatusMsg(OrderStatusEnum.NO_TAKE_RECEIPT.getStatus());
             }
 
             for (User user:users){
@@ -129,19 +137,19 @@ public class OrderService implements IOrderService {
         OrderExample.Criteria criteria = orderExample.createCriteria();
         criteria.andOrderIdEqualTo(order.getOrderId());
 
-        Order order1 = selectOrderById(order.getOrderId());
-        order1.setOrderName(order.getOrderName());
-        order.setOrderPubUserId(order.getOrderPubUserId());
-        order.setOrderUserId(order.getOrderUserId());
-        order.setOrderCommodityId(order.getOrderCommodityId());
-        order.setOrderStatus(order.getOrderStatus());
-        order.setOrderAddr(order.getOrderAddr());
-        order.setOrderArriveAddr(order.getOrderArriveAddr());
-        order.setOrderBeginRentTime(order.getOrderBeginRentTime());
-        order.setOrderEndRentTime(order.getOrderEndRentTime());
-        order.setOrderBackTime(order.getOrderBackTime());
+//        Order order1 = selectOrderById(order.getOrderId());
+//        order1.setOrderName(order.getOrderName());
+//        order.setOrderPubUserId(order.getOrderPubUserId());
+//        order.setOrderUserId(order.getOrderUserId());
+//        order.setOrderCommodityId(order.getOrderCommodityId());
+//        order.setOrderStatus(order.getOrderStatus());
+//        order.setOrderAddr(order.getOrderAddr());
+//        order.setOrderArriveAddr(order.getOrderArriveAddr());
+//        order.setOrderBeginRentTime(order.getOrderBeginRentTime());
+//        order.setOrderEndRentTime(order.getOrderEndRentTime());
+//        order.setOrderBackTime(order.getOrderBackTime());
 
-        int result = orderMapper.updateByExample(order1, orderExample);
+        int result = orderMapper.updateByExampleSelective(order, orderExample);
         return result;
     }
 

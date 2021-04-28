@@ -149,7 +149,7 @@
         $.each(result,function(index,rs){
             showmain.append("<div class='showinner'>" +
                 "<a href='" + PROJECT_PATH + "/to_commoditypage?commodityId=" + rs.commodityId + "'>" +
-                "<img src='" + rs.commodityImgSrc + "' ><br>" +
+                "<img src='" + PROJECT_PATH + rs.commodityImgSrc + "' ><br>" +
                 "<span>" + rs.commodityName + "</span>" +
                 "</a></div>");
         });

@@ -115,7 +115,7 @@
         $.each(ls,function(index,coms){
             var contextDiv2 = $("<div></div>");
             var contexthref = $("<a href='" + PROJECT_PATH + "/to_commoditypage?commodityId=" + coms.commodityId + "' ></a>");
-            var contextImg = $("<img src='../img/dongman1.jpg'>");
+            var contextImg = $("<img src='" + PROJECT_PATH + coms.commodityImgSrc + "'>");
             contextDiv.append(contextDiv2.append(contexthref.append(contextImg).append("<br/>" + coms.commodityName)));
         });
 

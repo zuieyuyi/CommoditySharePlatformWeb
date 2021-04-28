@@ -18,6 +18,7 @@ public class FilterChainDefinitionMapBuilder {
         //从数据库中读取的数据
         //过滤静态资源
         linkedHashMap.put("/static/**","anon");
+        linkedHashMap.put("/uploadFile/**","anon");
         linkedHashMap.put("/webjars/**","anon");
         //过滤
         linkedHashMap.put("/login","anon");
