@@ -46,6 +46,8 @@ public class CommodityController {
         String year = request.getParameter("year") == null?"":request.getParameter("year");
         String month = request.getParameter("month") == null?"":request.getParameter("month");
         String userId = request.getParameter("userId") == null?"":request.getParameter("userId");
+        //搜索内容
+        String search = request.getParameter("search") == null?"":request.getParameter("search").trim();
 
         //过滤条件
         if (!StringUtils.isEmpty(commodityTag)){
@@ -83,6 +85,16 @@ public class CommodityController {
         }
         if (!StringUtils.isEmpty(userId)){
             criteria.andCommodityUserIdEqualTo(Integer.parseInt(userId));
+        }
+        //查询内容
+        if (!StringUtils.isEmpty(search)){
+            criteria.andCommodityNameLike(search);
+            CommodityExample.Criteria criteria2 = example.createCriteria();
+            criteria2.andCommodityTagLike(search);
+            CommodityExample.Criteria criteria3 = example.createCriteria();
+            criteria3.andCommodityQualityNotLike(search);
+            example.or(criteria2);
+            example.or(criteria3);
         }
 
         List<Commodity> commodities = commodityService.selectAllCommodities(example);

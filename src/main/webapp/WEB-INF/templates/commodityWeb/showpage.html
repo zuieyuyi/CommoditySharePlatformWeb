@@ -19,10 +19,10 @@
             <div class="navtag" id="typeDiv">
                 <div>类型:</div>
                 <div><span title="全部" class="clickIn" style="color: #00a1d6">全部</span></div>
-                <div><span title="动漫">生活便利</span></div>
-                <div><span title="游戏">服装装扮</span></div>
-                <div><span title="音乐">娱乐休闲</span></div>
-                <div><span title="生活">电子设备</span></div>
+                <div><span title="生活便利">生活便利</span></div>
+                <div><span title="服装装扮">服装装扮</span></div>
+                <div><span title="娱乐休闲">娱乐休闲</span></div>
+                <div><span title="电子设备">电子设备</span></div>
             </div>
             <div class="navtag" id="yearsDiv">
                 <div>&nbsp;年:</div>
@@ -45,6 +45,10 @@
                 <div><span title="12月">12月</span></div>
             </div>
         </div>
+        <!-- 搜索栏 -->
+        <div id="searchText" class="row" >
+            <input type="text" onchange="search()" class="form-control col-12" placeholder="请输入你想查询的商品">
+        </div>
         <!-- 显示栏 -->
         <div id="showmain">
             
@@ -64,7 +68,7 @@
 
     $(document).ready(function(){
         //时间索引生成
-        buildYearElm()
+        buildYearElm();
         //索引点击
         clickIndex("#typeDiv");
         clickIndex("#yearsDiv");
@@ -212,6 +216,29 @@
         }
         cutpage.append(nextPage).append(lastPage);
     }
+
+    function search(){
+        var search = $("#searchText").val();
+        $.ajax({
+            url : PROJECT_PATH + "/commodity/commodities",
+            dataType : "json",
+            type : "get",
+            sync : false,
+            data : {"pn":pn,"ps":"12","search":search},
+            success : function(data){
+                if(data.code == 10000){
+                    //生成结果数据
+                    buildSearchResult(data.data.list);
+                    //生成页面下标
+                    buildPage(data.data);
+                }else{
+                    alert(data.msg);
+                }
+            }
+
+        });
+    }
+
 
 
     /*]]>*/
