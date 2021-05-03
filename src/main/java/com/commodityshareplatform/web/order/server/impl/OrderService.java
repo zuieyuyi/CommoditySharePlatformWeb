@@ -43,6 +43,15 @@ public class OrderService implements IOrderService {
         List<Commodity> commodities = commodityMapper.selectAllCommodities(commodityExample);
 
         for (Order order:orders){
+            //订单状态为3，则时间到了要变为7
+            if (order.getOrderStatus() == 3){
+                Date now = new Date();
+                if (now.getTime() > order.getOrderEndRentTime().getTime()){
+                    order.setOrderStatus(7);
+                    updateOrder(order);
+                }
+            }
+
             //确定订单状态信息
             if (order.getOrderStatus() == OrderStatusEnum.PAYMENT.getStatusCode()){
                 order.setOrderStatusMsg(OrderStatusEnum.PAYMENT.getStatus());
@@ -62,6 +71,10 @@ public class OrderService implements IOrderService {
                 order.setOrderStatusMsg(OrderStatusEnum.TAKE_RECEIPT.getStatus());
             }else if (order.getOrderStatus() == OrderStatusEnum.NO_TAKE_RECEIPT.getStatusCode()){
                 order.setOrderStatusMsg(OrderStatusEnum.NO_TAKE_RECEIPT.getStatus());
+            }else if (order.getOrderStatus() == OrderStatusEnum.RETURN_BACK.getStatusCode()){
+                order.setOrderStatusMsg(OrderStatusEnum.RETURN_BACK.getStatus());
+            }else if (order.getOrderStatus() == OrderStatusEnum.RETURNING.getStatusCode()){
+                order.setOrderStatusMsg(OrderStatusEnum.RETURNING.getStatus());
             }
 
             for (User user:users){

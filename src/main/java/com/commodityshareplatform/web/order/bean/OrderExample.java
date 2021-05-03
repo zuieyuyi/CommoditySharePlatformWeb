@@ -1165,6 +1165,66 @@ public class OrderExample {
             return (Criteria) this;
         }
 
+        public Criteria andOrderReturnTime() {
+            addCriterion("ORDER_RETURN_TIME is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderReturnTimeIsNotNull() {
+            addCriterion("ORDER_RETURN_TIME is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderReturnTimeEqualTo(Integer value) {
+            addCriterion("ORDER_RETURN_TIME =", value, "orderReturnTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderReturnTimeNotEqualTo(Integer value) {
+            addCriterion("ORDER_RETURN_TIME <>", value, "orderReturnTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderReturnTimeGreaterThan(Integer value) {
+            addCriterion("ORDER_RETURN_TIME >", value, "orderReturnTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderReturnTimeGreaterThanOrEqualTo(Integer value) {
+            addCriterion("ORDER_RETURN_TIME >=", value, "orderReturnTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderReturnTimeLessThan(Integer value) {
+            addCriterion("ORDER_RETURN_TIME <", value, "orderReturnTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderReturnTimeLessThanOrEqualTo(Integer value) {
+            addCriterion("ORDER_RETURN_TIME <=", value, "orderReturnTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderReturnTimeIn(List<Integer> values) {
+            addCriterion("ORDER_RETURN_TIME in", values, "orderReturnTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderReturnTimeNotIn(List<Integer> values) {
+            addCriterion("ORDER_RETURN_TIME not in", values, "orderReturnTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderReturnTimeBetween(Integer value1, Integer value2) {
+            addCriterion("ORDER_RETURN_TIME between", value1, value2, "orderReturnTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderReturnTimeNotBetween(Integer value1, Integer value2) {
+            addCriterion("ORDER_RETURN_TIME not between", value1, value2, "orderReturnTime");
+            return (Criteria) this;
+        }
+
         public Criteria andIsValidIsNull() {
             addCriterion("\"IS_ VALID\" is null");
             return (Criteria) this;

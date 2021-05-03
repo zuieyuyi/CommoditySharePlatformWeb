@@ -9,10 +9,13 @@ public enum OrderStatusEnum {
     NO_TAKE_DELIVERY(6,"未确认出租"),
     NO_RETURN(7,"未返还"),
     TAKE_RECEIPT(8,"确认收货"),
-    NO_TAKE_RECEIPT(9,"未确认收货");
+    NO_TAKE_RECEIPT(9,"未确认收货"),
+    RETURN_BACK(10,"已退货"),
+    RETURNING(11,"退货中");
 
 
     /* 支付中1 -》 确认出租2（默认购买了就是，卖家）-》 未确认收货9 -》 确认收货8（买家） -》 出租中3 -》 未返还7（到了结束时间）-》 返还确认4（买家） -》 完成订单5（卖家）*/
+    /* 支付中1 -》 确认出租2（默认购买了就是，卖家）-》 未确认收货9 -》 确认收货8（买家） -》 出租中3 -》(之前都可退货) 未返还7（到了结束时间）-》 返还确认4（买家） -》 完成订单5（卖家）*/
 
     private Integer statusCode;
     private String status;

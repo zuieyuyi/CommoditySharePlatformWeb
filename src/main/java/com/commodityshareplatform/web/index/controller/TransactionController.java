@@ -7,6 +7,7 @@ import com.commodityshareplatform.web.enuminfo.CommodityStatusEnum;
 import com.commodityshareplatform.web.enuminfo.OrderStatusEnum;
 import com.commodityshareplatform.web.order.bean.Order;
 import com.commodityshareplatform.web.order.server.IOrderService;
+import com.commodityshareplatform.web.order.server.impl.OrderService;
 import com.commodityshareplatform.web.user.bean.User;
 import com.commodityshareplatform.web.user.server.IUserService;
 import com.commodityshareplatform.web.utils.Result;
@@ -107,11 +108,11 @@ public class TransactionController {
         orderService.insertOrder(order);
         //2、修改商品数量
         Commodity commodity = commodityService.selectCommodityById(Integer.parseInt(orderCommodityId));
-        commodity.setCommodityNum(commodity.getCommodityNum() - Integer.parseInt(orderCommodityNum));
         //如果商品为0则状态变为售罄
         if (commodity.getCommodityNum() - Integer.parseInt(orderCommodityNum) == 0){
             commodity.setCommodityStatus(CommodityStatusEnum.SELL_OUT.getStatusCode());
         }
+        commodity.setCommodityNum(commodity.getCommodityNum() - Integer.parseInt(orderCommodityNum));
         commodityService.updateCommodity(commodity);
 
         //3、修改用户金额数量
@@ -146,20 +147,96 @@ public class TransactionController {
 //        //将钱退还给用户
 //    }
 
-//    /**
-//     * 确认收货
-//     * @return
-//     */
-//    @RequestMapping(value = "/receipt",method = RequestMethod.POST)
-//    @ResponseBody
-//    @Transactional(propagation = Propagation.REQUIRES_NEW,
-//            isolation = Isolation.READ_COMMITTED,
-//            readOnly = false,
-//            timeout = 2,
-//            rollbackFor = {Exception.class})
-//    public Result takeReceipt(Order order){
-//        order.setOrderStatus(OrderStatusEnum.RENT_OUT.getStatusCode());
-//        orderService.updateOrder(order);
-//        return ResultUtils.success();
-//    }
+    /**
+     * 完成订单
+     * @return
+     */
+    @RequestMapping(value = "/orderComplete",method = RequestMethod.POST)
+    @ResponseBody
+    @Transactional(propagation = Propagation.REQUIRES_NEW,
+            isolation = Isolation.READ_COMMITTED,
+            readOnly = false,
+            timeout = 2,
+            rollbackFor = {Exception.class})
+    public Result orderComplete(HttpServletRequest request){
+        String orderId = request.getParameter("orderId") == null?"":request.getParameter("orderId");
+
+        //查出订单和商品信息
+        Order order = orderService.selectOrderById(Integer.parseInt(orderId));
+        Commodity commodity = commodityService.selectCommodityById(order.getOrderCommodityId());
+
+        //修改订单状态和商品数量
+        order.setOrderStatus(OrderStatusEnum.RETURN_OVER.getStatusCode());
+        orderService.updateOrder(order);
+
+        commodity.setCommodityNum(commodity.getCommodityNum() + order.getOrderCommodityNum());
+        //如果商品是售罄状态则重新变为销售中
+        if (commodity.getCommodityStatus() == CommodityStatusEnum.SELL_OUT.getStatusCode()){
+            commodity.setCommodityStatus(CommodityStatusEnum.SELL.getStatusCode());
+        }
+
+        commodityService.updateCommodity(commodity);
+
+        return ResultUtils.success();
+    }
+
+    /**
+     * 点击确认退货
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/returnCommodity",method = RequestMethod.POST)
+    @ResponseBody
+    @Transactional(propagation = Propagation.REQUIRES_NEW,
+            isolation = Isolation.READ_COMMITTED,
+            readOnly = false,
+            timeout = 2,
+            rollbackFor = {Exception.class})
+    public Result returnCommodity(HttpServletRequest request) {
+        String orderId = request.getParameter("orderId") == null?"":request.getParameter("orderId");
+
+        //查出订单和商品信息
+        Order order = orderService.selectOrderById(Integer.parseInt(orderId));
+        Commodity commodity = commodityService.selectCommodityById(order.getOrderCommodityId());
+
+        //确认订单状态
+        if (order.getOrderStatus() != OrderStatusEnum.RETURNING.getStatusCode()){
+            return ResultUtils.error(-1,"请确认订单状态");
+        }
+
+        //计算卖家返还金额（（退货日期-开始日期）/（结束-开始）*总价）
+        Date now = new Date();
+        Date orderBeginRentTime = order.getOrderBeginRentTime();
+        Date orderReturnTime = order.getOrderReturnTime();
+        Date orderEndRentTime = order.getOrderEndRentTime();
+
+        BigDecimal total = null;
+        //还没到租借期退还全额
+        if (now.getTime()<orderBeginRentTime.getTime()){
+            total = order.getOrderCommodityTotal();
+        }else{
+            Long day1 = Math.abs(orderReturnTime.getTime()-orderBeginRentTime.getTime());
+            Long day2 = Math.abs(orderEndRentTime.getTime()-orderBeginRentTime.getTime());
+            BigDecimal day = new BigDecimal(day1.toString()).divide(new BigDecimal(day2.toString()),3,BigDecimal.ROUND_HALF_UP);
+
+            total = day.multiply(order.getOrderCommodityTotal());
+        }
+
+        //查询买家并修改返还金额
+        User user = userService.selectUserById(order.getOrderUserId());
+        user.setUserMoney(user.getUserMoney().subtract(total));
+        userService.updateUser(user);
+        //查询卖家并修改返还金额
+        User pubUser = userService.selectUserById(order.getOrderPubUserId());
+        pubUser.setUserMoney(pubUser.getUserMoney().add(total));
+        userService.updateUser(pubUser);
+        //返还商品
+        commodity.setCommodityNum(commodity.getCommodityNum() + order.getOrderCommodityNum());
+        commodityService.updateCommodity(commodity);
+        //修改订单状态
+        order.setOrderStatus(OrderStatusEnum.RETURN_BACK.getStatusCode());
+        orderService.updateOrder(order);
+
+        return ResultUtils.success();
+    }
 }

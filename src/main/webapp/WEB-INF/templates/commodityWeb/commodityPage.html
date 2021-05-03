@@ -9,6 +9,20 @@
     #bgbox{
         height: auto;
     }
+    .hotrank>a{
+        color: black;
+        text-decoration:none;
+    }
+    .hotrank>a:hover{
+        font-size: 20px;
+        color: green;
+        text-decoration:none;
+    }
+    .hotrank>a:focus{
+        font-size: 20px;
+        color: red;
+        text-decoration:none;
+    }
 </style>
 
 <body style="background-image: url('/CommoditySharePlatformWeb_war/static/img/indexbg.jpg');" >
@@ -66,96 +80,6 @@
                     <span>热门商品排行</span>
                 </div>
                 <div class="hotrank">
-                    <div class="item one">
-                        <div class="rank"><span>1</span></div>
-                        <div class="imgbox"><img src="../img/dongman2.png" /></div>
-                        <div class="itemname"><span>xx</span></div>
-                    </div>
-                    <div class="item two">
-                        <div class="rank"><span>2</span></div>
-                        <div class="imgbox"><img src="../img/dongman3.jpg" /></div>
-                        <div class="itemname"><span>xx</span></div>
-                    </div>
-                    <div class="item three">
-                        <div class="rank"><span>3</span></div>
-                        <div class="imgbox"><img src="../img/dongman6.png" /></div>
-                        <div class="itemname"><span>xx</span></div>
-                    </div>
-                    <div class="item">
-                        <div class="rank"><span>4</span></div>
-                        <div class="imgbox"><img src="../img/game3.jpeg" /></div>
-                        <div class="itemname"><span>xx</span></div>
-                    </div>
-                    <div class="item">
-                        <div class="rank"><span>5</span></div>
-                        <div class="imgbox"><img src="../img/game5.jpeg" /></div>
-                        <div class="itemname"><span>xx</span></div>
-                    </div>
-                    <div class="item">
-                        <div class="rank"><span>6</span></div>
-                        <div class="imgbox"><img src="../img/music2.jpg" /></div>
-                        <div class="itemname"><span>xx</span></div>
-                    </div>
-                    <div class="item">
-                        <div class="rank"><span>7</span></div>
-                        <div class="imgbox"><img src="../img/music5.jpg" /></div>
-                        <div class="itemname"><span>xx</span></div>
-                    </div>
-                    <div class="item">
-                        <div class="rank"><span>8</span></div>
-                        <div class="imgbox"><img src="../img/live3.jpg" /></div>
-                        <div class="itemname"><span>xx</span></div>
-                    </div>
-                    <div class="item">
-                        <div class="rank"><span>9</span></div>
-                        <div class="imgbox"><img src="../img/live2.jpg" /></div>
-                        <div class="itemname"><span>xx</span></div>
-                    </div>
-                    <div class="item">
-                        <div class="rank"><span>10</span></div>
-                        <div class="imgbox"><img src="../img/dongman1.jpg" /></div>
-                        <div class="itemname"><span>xx</span></div>
-                    </div>
-                </div>
-                <div class="lefttitle">
-                    <span>精品商品推荐</span>
-                </div>
-                <div class="hotrank finebox">
-                    <div class="item one">
-                        <div class="rank"><span>1</span></div>
-                        <div class="imgbox"><img src="../img/live4.jpg" /></div>
-                        <div class="itemname"><span>xx</span></div>
-                    </div>
-                    <div class="item two">
-                        <div class="rank"><span>2</span></div>
-                        <div class="imgbox"><img src="../img/live1.jpg" /></div>
-                        <div class="itemname"><span>xx</span></div>
-                    </div>
-                    <div class="item three">
-                        <div class="rank"><span>3</span></div>
-                        <div class="imgbox"><img src="../img/game2.jpg" /></div>
-                        <div class="itemname"><span>xx</span></div>
-                    </div>
-                    <div class="item">
-                        <div class="rank"><span>4</span></div>
-                        <div class="imgbox"><img src="../img/game1.jpg" /></div>
-                        <div class="itemname"><span>xx</span></div>
-                    </div>
-                    <div class="item">
-                        <div class="rank"><span>5</span></div>
-                        <div class="imgbox"><img src="../img/music1.jpg" /></div>
-                        <div class="itemname"><span>xx</span></div>
-                    </div>
-                    <div class="item">
-                        <div class="rank"><span>6</span></div>
-                        <div class="imgbox"><img src="../img/game4.jpg" /></div>
-                        <div class="itemname"><span>xx</span></div>
-                    </div>
-                    <div class="item">
-                        <div class="rank"><span>7</span></div>
-                        <div class="imgbox"><img src="../img/music5.jpg" /></div>
-                        <div class="itemname"><span>xx</span></div>
-                    </div>
                 </div>
             </div>
             <!-- 商品展示区 -->
@@ -189,6 +113,8 @@
         getCommodity()
         //获取该商品的评论
         getComment();
+        //获取热门商品
+        getHotCommodities();
     });
 
     //获取商品信息
@@ -425,6 +351,70 @@
             return false;
         }
         return true;
+    }
+    // <a href="">
+    //     <div class="item one">
+    //     <div class="rank"><span>1</span></div>
+    // <div class="imgbox"><img src="../img/dongman2.png" /></div>
+    //     <div class="itemname"><span>xx</span></div>
+    // </div>
+    // </a>
+    function getHotCommodities(){
+        $.ajax({
+            url : PROJECT_PATH + "/commodity/commodities",
+            dataType : "json",
+            type : "get",
+            sync : false,
+            data : {"pn":"1","ps":"10","commodityStatus":100,"orderByAsc":"COMMODITY_CREATE_DATA"},
+            success : function(data){
+                if(data.code == 10000){
+                    //生成元素
+                    var hotrank = $(".hotrank");
+                    var list = data.data.list;
+
+                    $.each(list,function(index,com){
+                        var  appendElm = null;
+                        if (index == 0){
+                            appendElm = $("<a href='" + PROJECT_PATH + "/to_commoditypage?commodityId=" + com.commodityId + "'>\n" +
+                                "        <div class='item one'>\n" +
+                                "        <div class='rank'><span>1</span></div>\n" +
+                                "    <div class='imgbox'><img src='" + PROJECT_PATH + com.commodityImgSrc + "' /></div>\n" +
+                                "        <div class='itemname'><span>" + com.commodityName + "</span></div>\n" +
+                                "    </div>\n" +
+                                "    </a>");
+                        }else if (index == 1){
+                            appendElm = $("<a href='" + PROJECT_PATH + "/to_commoditypage?commodityId=" + com.commodityId + "'>\n" +
+                                "        <div class='item two'>\n" +
+                                "        <div class='rank'><span>2</span></div>\n" +
+                                "    <div class='imgbox'><img src='" + PROJECT_PATH + com.commodityImgSrc + "' /></div>\n" +
+                                "        <div class='itemname'><span>" + com.commodityName + "</span></div>\n" +
+                                "    </div>\n" +
+                                "    </a>");
+                        }else if (index == 2){
+                            appendElm = $("<a href='" + PROJECT_PATH + "/to_commoditypage?commodityId=" + com.commodityId + "'>\n" +
+                                "        <div class='item three'>\n" +
+                                "        <div class='rank'><span>3</span></div>\n" +
+                                "    <div class='imgbox'><img src='" + PROJECT_PATH + com.commodityImgSrc + "' /></div>\n" +
+                                "        <div class='itemname'><span>" + com.commodityName + "</span></div>\n" +
+                                "    </div>\n" +
+                                "    </a>");
+                        }else{
+                            appendElm = $("<a href='" + PROJECT_PATH + "/to_commoditypage?commodityId=" + com.commodityId + "'>\n" +
+                                "        <div class='item'>\n" +
+                                "        <div class='rank'><span>" + (index+1) + "</span></div>\n" +
+                                "    <div class='imgbox'><img src='" + PROJECT_PATH + com.commodityImgSrc + "' /></div>\n" +
+                                "        <div class='itemname'><span>" + com.commodityName + "</span></div>\n" +
+                                "    </div>\n" +
+                                "    </a>");
+                        }
+                        hotrank.append(appendElm);
+                    });
+
+                }else{
+                    alert(data.msg);
+                }
+            }
+        });
     }
 
     /*]]>*/

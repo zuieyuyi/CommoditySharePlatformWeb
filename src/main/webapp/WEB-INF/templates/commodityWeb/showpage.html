@@ -218,13 +218,13 @@
     }
 
     function search(){
-        var search = $("#searchText").val();
+        var search = $("#searchText>input").val();
         $.ajax({
             url : PROJECT_PATH + "/commodity/commodities",
             dataType : "json",
             type : "get",
             sync : false,
-            data : {"pn":pn,"ps":"12","search":search},
+            data : {"pn":"1","ps":"12","search":search},
             success : function(data){
                 if(data.code == 10000){
                     //生成结果数据

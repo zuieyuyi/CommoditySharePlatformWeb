@@ -63,7 +63,7 @@
                         <!--                    <input type="file" id="exampleInputFile" >-->
                         <input type="file" id="commodityImgSrc" >
                         <!--                    <p class="help-block">Example block-level help text here.</p>-->
-                        <input type="button" id="imgBtn" value="上传" onclick="uploadImg()">
+                        <input type="button" id="imgBtn" value="上传" onclick="uploadImg('#commodityImgSrc')">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -131,7 +131,7 @@
                         <!--                    <input type="file" id="exampleInputFile" >-->
                         <input type="file" id="editComImgSrc" >
                         <!--                    <p class="help-block">Example block-level help text here.</p>-->
-                        <input type="button" id="editImgBtn" value="上传" onclick="uploadImg()">
+                        <input type="button" id="editImgBtn" value="上传" onclick="uploadImg('#editComImgSrc')">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -219,6 +219,15 @@
                             <td>邮箱:</td>
                             <td>
                                 <input id="emailText" type="text"/>
+                            </td>
+                            <td>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>我的余额:</td>
+                            <td>
+                                <span id="userMoney"></span>
                             </td>
                             <td>
 
@@ -404,9 +413,28 @@
 
     //订单完成按钮order_over_but
     $(document).on("click",".order_over_but",function () {
+        $(this).addClass("disabled");
         var comf = confirm("是否确认完成订单？");
         if (comf == true){
-            orderStatusUpdate($(this).attr("data-info"),5,"订单完成");
+            orderComplete($(this).attr("data-info"),"订单完成");
+        }
+    });
+
+    //退货按钮事件order_return_back_but
+    $(document).on("click",".order_return_back_but",function () {
+        var comf = confirm("是否确认退货？");
+        if (comf == true){
+            var date = new Date();
+            orderStatusUpdate($(this).attr("data-info"),11,"已经退货请等待卖家用户处理",date.getFullYear()+"-"+date.getMonth()+"-"+date.getDate());
+        }
+    });
+
+    //退货确认事件
+    $(document).on("click",".order_return_ok_but",function () {
+        $(this).addClass("disabled");
+        var comf = confirm("是否完成退货？");
+        if (comf == true){
+            returnCommodity($(this).attr("data-info"),"退货完成，请检查金额是否退回");
         }
     });
 
@@ -426,6 +454,7 @@
                         $("#userId").val(person.userId);
                         $("#userName").val(person.userName);
                         $("#emailText").val(person.userEmail);
+                        $("#userMoney").append(person.userMoney);
                         $("#userAddr").val(person.userAddr);
                     }
                 }else{
@@ -556,7 +585,7 @@
 
     /* 商品列表模块 */
     //发送请求获取那一页数据
-    function toCommodityPage(pn) {
+    function                                                                                                                                                                                                                                                                                                                                                                                                                                                                toCommodityPage(pn) {
         $.ajax({
             url: PROJECT_PATH + "/commodity/commodities",
             data: {"pn":pn,"userId":USERID},
@@ -925,6 +954,14 @@
             var returnOverButTd = $("<button></button>").addClass("btn btn-danger btn-sm order_over_but").attr("aria-hidden", "true")
                 .append($("<span></span>").addClass("glyphicon glyphicon-pencil")).append("完成订单").attr("data-info",item.orderId);
 
+            //退货按钮
+            var returnBackButTd = $("<button></button>").addClass("btn btn-warning btn-sm order_return_back_but").attr("aria-hidden", "true")
+                .append($("<span></span>").addClass("glyphicon glyphicon-pencil")).append("退货").attr("data-info",item.orderId);
+
+            //确认退货按钮
+            var returnOkButTd = $("<button></button>").addClass("btn btn-warning btn-sm order_return_ok_but").attr("aria-hidden", "true")
+                .append($("<span></span>").addClass("glyphicon glyphicon-pencil")).append("退货确认").attr("data-info",item.orderId);
+
 
             //编辑按钮
             // var editButTd = $("<button></button>").addClass("btn btn-primary btn-sm edit_btn order_edit_but").attr("aria-hidden", "true")
@@ -935,16 +972,24 @@
             // var delButTd = $("<button></button>").addClass("btn btn-danger btn-sm delete_btn order_del_but").attr("aria-hidden", "true")
             //     .append($("<span></span>").addClass("glyphicon glyphicon-trash")).append("删除").attr("data-info",item.orderId);
 
-            if (item.orderPubUserName == USERNAME && item.orderStatus == 9){
-                orderOperateElm.append(takeReceiptButTd);
+            if (item.orderUserName == USERNAME && item.orderStatus == 9){
+                orderOperateElm.append(takeReceiptButTd).append(" ");
             }
 
-            if (item.orderUserName == USERNAME && item.orderStatus == 3){
-                orderOperateElm.append(returnButTd);
+            if (item.orderPubUserName == USERNAME && item.orderStatus == 7){
+                orderOperateElm.append(returnButTd).append(" ");
             }
 
-            if (item.orderPubUserName == USERNAME && item.orderStatus == 4){
-                orderOperateElm.append(returnOverButTd);
+            if (item.orderUserName == USERNAME && item.orderStatus == 4){
+                orderOperateElm.append(returnOverButTd).append(" ");
+            }
+
+            if (item.orderUserName == USERNAME && item.orderStatus != 11 && item.orderStatus != 10 && item.orderStatus != 5 && item.orderStatus != 7){
+                orderOperateElm.append(returnBackButTd).append(" ");
+            }
+
+            if (item.orderPubUserName == USERNAME && item.orderStatus == 11){
+                orderOperateElm.append(returnOkButTd).append(" ");
             }
 
             // userOperateElm.append(selectButTd).append(" ").append(delButTd);
@@ -976,10 +1021,11 @@
     // }
 
     //修改订单状态
-    function orderStatusUpdate(orderId,orderStatus,msg){
+    function orderStatusUpdate(orderId,orderStatus,msg,orderReturnTime){
+        var data = {"_method":"PUT","orderId":orderId,"orderStatus":orderStatus,"orderReturnTime":orderReturnTime};
         $.ajax({
             url: PROJECT_PATH+"/order/order",
-            data: {"_method":"PUT","orderId":orderId,"orderStatus":orderStatus},
+            data: data,
             type: "POST",
             success: function (result) {
                 if (result.code == 10000){
@@ -1165,9 +1211,9 @@
     }
 
     //图片上传
-    function uploadImg() {
+    function uploadImg(elmId) {
         //获取文件对象以及其他参数
-        var file = $("#commodityImgSrc")[0].files[0];
+        var file = $(elmId)[0].files[0];
         var type = file.name.substr(file.name.lastIndexOf("."),file.name.length);
 
         if(type!=".jpg"&&type!=".gif"&&type!=".jpeg"&& type!=".png"){
@@ -1190,6 +1236,44 @@
             success : function(result) {
                 if (result.code == 10000){
                     alert("上传成功");
+                }else{
+                    alert(result.msg);
+                }
+            }
+        });
+    }
+
+    //退货请求
+    function returnCommodity(orderId,msg){
+        $.ajax({
+            url : PROJECT_PATH + '/transaction/returnCommodity',
+            type : 'post',
+            dataType : 'json',
+            data : {"orderId":orderId},
+            success : function(result) {
+                if (result.code == 10000){
+                    alert(msg);
+                    toOrderPage(ordercurrentNum);
+                    toCommodityPage(commoditycurrentNum);
+                }else{
+                    alert(result.msg);
+                }
+            }
+        });
+    }
+
+    //发送完成订单请求
+    function orderComplete(orderId,msg){
+        $.ajax({
+            url : PROJECT_PATH + '/transaction/orderComplete',
+            type : 'post',
+            dataType : 'json',
+            data : {"orderId":orderId},
+            success : function(result) {
+                if (result.code == 10000){
+                    alert(msg);
+                    toOrderPage(ordercurrentNum);
+                    toCommodityPage(commoditycurrentNum);
                 }else{
                     alert(result.msg);
                 }

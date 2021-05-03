@@ -30,6 +30,16 @@ public class CommodityController {
     @Autowired
     ICommodityService commodityService;
 
+//    /**
+//     * 获取热租品列表
+//     * @return
+//     */
+//    @RequestMapping(value = "hotCommodities",method = RequestMethod.GET)
+//    @ResponseBody
+//    public Result getHotCommodities(){
+//
+//    }
+
     /**
      * 获取全部商品(分页)
      */
@@ -46,8 +56,10 @@ public class CommodityController {
         String year = request.getParameter("year") == null?"":request.getParameter("year");
         String month = request.getParameter("month") == null?"":request.getParameter("month");
         String userId = request.getParameter("userId") == null?"":request.getParameter("userId");
+        String orderByAsc = request.getParameter("orderByAsc") == null?"":request.getParameter("orderByAsc");
         //搜索内容
         String search = request.getParameter("search") == null?"":request.getParameter("search").trim();
+
 
         //过滤条件
         if (!StringUtils.isEmpty(commodityTag)){
@@ -86,15 +98,21 @@ public class CommodityController {
         if (!StringUtils.isEmpty(userId)){
             criteria.andCommodityUserIdEqualTo(Integer.parseInt(userId));
         }
+        if (!StringUtils.isEmpty(orderByAsc)){
+            example.setOrderByClause(orderByAsc + " asc");
+        }
         //查询内容
         if (!StringUtils.isEmpty(search)){
-            criteria.andCommodityNameLike(search);
-            CommodityExample.Criteria criteria2 = example.createCriteria();
-            criteria2.andCommodityTagLike(search);
-            CommodityExample.Criteria criteria3 = example.createCriteria();
-            criteria3.andCommodityQualityNotLike(search);
-            example.or(criteria2);
-            example.or(criteria3);
+            example.or().andCommodityNameLike(search);
+            example.or().andCommodityTagLike(search);
+            example.or().andCommodityQualityLike(search);
+//            criteria.andCommodityNameLike(search);
+//            CommodityExample.Criteria criteria2 = example.createCriteria();
+//            criteria2.andCommodityTagLike(search);
+//            CommodityExample.Criteria criteria3 = example.createCriteria();
+//            criteria3.andCommodityQualityNotLike(search);
+//            example.or(criteria2);
+//            example.or(criteria3);
         }
 
         List<Commodity> commodities = commodityService.selectAllCommodities(example);
@@ -125,13 +143,9 @@ public class CommodityController {
         if (files.length == 0){
             return ResultUtils.error(-1,"请上传文件");
         }
-        File img = null;
-        for (File f: files){
-            if (f.isFile()){
-                img = f;
-                break;
-            }
-        }
+        //通过创建日期排序
+        File img = files[files.length-1];
+
         File imgToDir = new File(imgPath.getPath() + "/" + date.getTime());//转移图片路径
         File img2 =  new File(imgToDir.getPath() + "/" + img.getName());
 
@@ -162,7 +176,38 @@ public class CommodityController {
      */
     @RequestMapping(value = "commodity",method = RequestMethod.PUT)
     @ResponseBody
-    public Result<Commodity> saveCommodity(Commodity commodity){
+    public Result<Commodity> saveCommodity(Commodity commodity,HttpServletRequest request){
+        //获取商品图片路径
+        //默认web地址
+        String contextPath = request.getServletContext().getRealPath("");
+        Commodity com = commodityService.selectCommodityById(commodity.getCommodityId());
+        //图片与默认web地址的相对路径
+        String commodityImgSrc = com.getCommodityImgSrc();
+        //原图
+        File oldImg = new File(contextPath + "/" + commodityImgSrc);
+        //上传图片地址
+        File imgPath = new File(contextPath + "/uploadFile/" + com.getCommodityUserId());
+        File[] files = imgPath.listFiles();
+        if (files == null){
+//            return ResultUtils.error(-1,"请上传文件");
+        }else{
+            //新图
+            File newImg = files[files.length-1];;
+            if(newImg.exists()){
+                //删除旧图片
+                oldImg.delete();
+                //转移新图
+                File newImgTo = new File(oldImg.getParent(),newImg.getName());
+                try {
+                    FileUtils.copyFile(newImg,newImgTo);
+                    commodity.setCommodityImgSrc(com.getCommodityImgSrc().replaceAll(oldImg.getName(),"") + newImg.getName());
+                    newImg.delete();
+                } catch (IOException e) {
+                    return ResultUtils.error(-1,"图片添加失败");
+                }
+            }
+        }
+
         if (commodity.getCommodityId() == null || commodity.getCommodityId() == 0){
             return ResultUtils.error(-1,"商品保存失败");
         }
@@ -256,7 +301,14 @@ public class CommodityController {
             dir = new File(contextPath+"\\"+userId);
             if (!dir.exists()){
                 dir.mkdirs();
-                contextPath += "\\" + userId;
+//                contextPath += "\\" + userId;
+            }else {
+                File[] files = dir.listFiles();
+                for (File f: files){
+                    if (f.isFile()){
+                        f.delete();
+                    }
+                }
             }
         }
 //        if (!StringUtils.isEmpty(commodityId)){

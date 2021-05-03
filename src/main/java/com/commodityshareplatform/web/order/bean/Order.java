@@ -39,6 +39,9 @@ public class Order extends OrderKey {
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date orderBackTime;
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date orderReturnTime;
 
     private Integer isValid;
 
@@ -174,6 +177,14 @@ public class Order extends OrderKey {
 
     public void setOrderBackTime(Date orderBackTime) {
         this.orderBackTime = orderBackTime;
+    }
+
+    public Date getOrderReturnTime() {
+        return orderReturnTime;
+    }
+
+    public void setOrderReturnTime(Date orderReturnTime) {
+        this.orderReturnTime = orderReturnTime;
     }
 
     public Integer getIsValid() {
