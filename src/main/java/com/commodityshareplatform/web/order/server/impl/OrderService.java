@@ -150,18 +150,6 @@ public class OrderService implements IOrderService {
         OrderExample.Criteria criteria = orderExample.createCriteria();
         criteria.andOrderIdEqualTo(order.getOrderId());
 
-//        Order order1 = selectOrderById(order.getOrderId());
-//        order1.setOrderName(order.getOrderName());
-//        order.setOrderPubUserId(order.getOrderPubUserId());
-//        order.setOrderUserId(order.getOrderUserId());
-//        order.setOrderCommodityId(order.getOrderCommodityId());
-//        order.setOrderStatus(order.getOrderStatus());
-//        order.setOrderAddr(order.getOrderAddr());
-//        order.setOrderArriveAddr(order.getOrderArriveAddr());
-//        order.setOrderBeginRentTime(order.getOrderBeginRentTime());
-//        order.setOrderEndRentTime(order.getOrderEndRentTime());
-//        order.setOrderBackTime(order.getOrderBackTime());
-
         int result = orderMapper.updateByExampleSelective(order, orderExample);
         return result;
     }
