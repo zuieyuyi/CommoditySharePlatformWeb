@@ -115,6 +115,31 @@ public class OrderService implements IOrderService {
         User pubUser = userService.selectUserById(order.getOrderPubUserId());
         Commodity commodity = commodityService.selectCommodityById(order.getOrderCommodityId());
 
+        //确定订单状态信息
+        if (order.getOrderStatus() == OrderStatusEnum.PAYMENT.getStatusCode()){
+            order.setOrderStatusMsg(OrderStatusEnum.PAYMENT.getStatus());
+        }else if (order.getOrderStatus() == OrderStatusEnum.TAKE_DELIVERY.getStatusCode()){
+            order.setOrderStatusMsg(OrderStatusEnum.TAKE_DELIVERY.getStatus());
+        }else if (order.getOrderStatus() == OrderStatusEnum.RENT_OUT.getStatusCode()){
+            order.setOrderStatusMsg(OrderStatusEnum.RENT_OUT.getStatus());
+        }else if (order.getOrderStatus() == OrderStatusEnum.RETURN.getStatusCode()){
+            order.setOrderStatusMsg(OrderStatusEnum.RETURN.getStatus());
+        }else if (order.getOrderStatus() == OrderStatusEnum.RETURN_OVER.getStatusCode()){
+            order.setOrderStatusMsg(OrderStatusEnum.RETURN_OVER.getStatus());
+        }else if (order.getOrderStatus() == OrderStatusEnum.NO_TAKE_DELIVERY.getStatusCode()){
+            order.setOrderStatusMsg(OrderStatusEnum.NO_TAKE_DELIVERY.getStatus());
+        }else if (order.getOrderStatus() == OrderStatusEnum.NO_RETURN.getStatusCode()){
+            order.setOrderStatusMsg(OrderStatusEnum.NO_RETURN.getStatus());
+        }else if (order.getOrderStatus() == OrderStatusEnum.TAKE_RECEIPT.getStatusCode()){
+            order.setOrderStatusMsg(OrderStatusEnum.TAKE_RECEIPT.getStatus());
+        }else if (order.getOrderStatus() == OrderStatusEnum.NO_TAKE_RECEIPT.getStatusCode()){
+            order.setOrderStatusMsg(OrderStatusEnum.NO_TAKE_RECEIPT.getStatus());
+        }else if (order.getOrderStatus() == OrderStatusEnum.RETURN_BACK.getStatusCode()){
+            order.setOrderStatusMsg(OrderStatusEnum.RETURN_BACK.getStatus());
+        }else if (order.getOrderStatus() == OrderStatusEnum.RETURNING.getStatusCode()){
+            order.setOrderStatusMsg(OrderStatusEnum.RETURNING.getStatus());
+        }
+
         if (user != null){
             order.setOrderUserName(user.getUserName());
         }

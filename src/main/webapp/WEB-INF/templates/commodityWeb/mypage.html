@@ -142,6 +142,85 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+<!-- 查看订单详情模态框 -->
+<div class="modal fade" tabindex="-1" role="dialog" id="select_order_modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">查看订单详情</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-hover" id="order_table">
+                    <div class="form-group">
+                        <label for="orderId">订单Id:</label>
+                        <span id="orderId"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="orderName">订单名:</label>
+                        <span id="orderName"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="orderPubUserName">买家用户:</label>
+                        <span id="orderPubUserName"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="orderUserName">卖家用户:</label>
+                        <span id="orderUserName"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="orderCommodityName">商品名:</label>
+                        <span id="orderCommodityName"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="orderCommodityNum">租借数量:</label>
+                        <span id="orderCommodityNum"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="orderCommodityTotal">商品总价:</label>
+                        <span id="orderCommodityTotal"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="orderCode">订单编号:</label>
+                        <span id="orderCode"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="orderStatusMsg">订单状态:</label>
+                        <span id="orderStatusMsg"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="orderAddr">订单发送地址:</label>
+                        <span id="orderAddr"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="orderArriveAddr">订单送达地址:</label>
+                        <span id="orderArriveAddr"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="orderBeginRentTime">租借开始时间:</label>
+                        <span id="orderBeginRentTime"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="orderEndRentTime">租借结束时间:</label>
+                        <span id="orderEndRentTime"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="orderBackTime">返还日期:</label>
+                        <span id="orderBackTime"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="orderReturnTime">退货时间:</label>
+                        <span id="orderReturnTime"></span>
+                    </div>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 <!-- 添加标签模态框 -->
 <div style="max-width: 1000px" class="modal fade" tabindex="-1" role="dialog" id="saveTagModal">
     <div class="modal-dialog" role="document">
@@ -200,7 +279,7 @@
         </div>
         <!-- 我的主页 -->
         <div id="mymainbox">
-            <div id="maininner">
+            <div id="maininner" style="padding-bottom: 20px;">
                 <div id="myconfig" class="maintitle">
                     <h3>一、修改个人信息</h3>
                 </div>
@@ -394,6 +473,37 @@
     //         delOrder($(this).attr("data-info"));
     //     }
     // });
+    // order_table
+    $(document).on("click",".order_select_but",function(){
+        var orderId = $(this).attr("data-info");
+        $.ajax({
+            url : PROJECT_PATH + "/order/order/"+orderId,
+            dataType : "json",
+            type : "get",
+            success : function(result){
+                if(result.code == 10000){
+                    var order = result.data;
+                    $("#orderId").html(order.orderId);
+                    $("#orderName").html(order.orderName);
+                    $("#orderPubUserName").html(order.orderPubUserName);
+                    $("#orderUserName").html(order.orderUserName);
+                    $("#orderCommodityName").html(order.orderCommodityName);
+                    $("#orderCommodityNum").html(order.orderCommodityNum);
+                    $("#orderCommodityTotal").html(order.orderCommodityTotal);
+                    $("#orderCode").html(order.orderCode);
+                    $("#orderStatusMsg").html(order.orderStatusMsg);
+                    $("#orderAddr").html(order.orderAddr);
+                    $("#orderBeginRentTime").html(order.orderBeginRentTime);
+                    $("#orderEndRentTime").html(order.orderEndRentTime);
+                    $("#orderArriveAddr").html(order.orderArriveAddr);
+                    $("#orderBackTime").html(order.orderBackTime);
+                    $("#orderReturnTime").html(order.orderReturnTime);
+                }else{
+                    alert(result.msg);
+                }
+            }
+        });
+    });
 
     //确认收货按钮
     $(document).on("click",".order_receipt_but",function () {
@@ -939,8 +1049,9 @@
 
             var orderOperateElm = $("<td></td>").append();
             //查看按钮
-            // var selectButTd = $("<button></button>").addClass("btn btn-success btn-sm select_btn order_select_but").attr("aria-hidden", "true")
-            //     .append($("<span></span>").addClass("glyphicon glyphicon-pencil")).append("查看").attr("data-info",item.orderId);
+            var selectButTd = $("<button></button>").addClass("btn btn-info btn-sm select_btn order_select_but").attr("aria-hidden", "true")
+                .append($("<span></span>").addClass("glyphicon glyphicon-pencil")).append("查看").attr("data-info",item.orderId)
+                .attr("data-toggle","modal").attr("data-target","#select_order_modal");
 
             //确认收货按钮
             var takeReceiptButTd = $("<button></button>").addClass("btn btn-success btn-sm order_receipt_but").attr("aria-hidden", "true")
@@ -971,6 +1082,7 @@
             //删除按钮
             // var delButTd = $("<button></button>").addClass("btn btn-danger btn-sm delete_btn order_del_but").attr("aria-hidden", "true")
             //     .append($("<span></span>").addClass("glyphicon glyphicon-trash")).append("删除").attr("data-info",item.orderId);
+            orderOperateElm.append(selectButTd).append(" ");
 
             if (item.orderUserName == USERNAME && item.orderStatus == 9){
                 orderOperateElm.append(takeReceiptButTd).append(" ");

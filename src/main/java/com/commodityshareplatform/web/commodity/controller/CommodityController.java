@@ -311,13 +311,7 @@ public class CommodityController {
                 }
             }
         }
-//        if (!StringUtils.isEmpty(commodityId)){
-//
-//        }
 
-        // 保存图片的路径，图片上传成功后，将路径保存到数据库
-//        String filePath = "F:\\upload";
-//         获取原始图片的扩展名
         String originalFilename = file.getOriginalFilename();
         // 生成文件新的名字
         String newFileName = UUID.randomUUID() + originalFilename;
