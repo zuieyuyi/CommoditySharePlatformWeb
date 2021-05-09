@@ -106,13 +106,6 @@ public class CommodityController {
             example.or().andCommodityNameLike(search);
             example.or().andCommodityTagLike(search);
             example.or().andCommodityQualityLike(search);
-//            criteria.andCommodityNameLike(search);
-//            CommodityExample.Criteria criteria2 = example.createCriteria();
-//            criteria2.andCommodityTagLike(search);
-//            CommodityExample.Criteria criteria3 = example.createCriteria();
-//            criteria3.andCommodityQualityNotLike(search);
-//            example.or(criteria2);
-//            example.or(criteria3);
         }
 
         List<Commodity> commodities = commodityService.selectAllCommodities(example);
