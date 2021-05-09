@@ -515,7 +515,7 @@
 
     //返还按钮order_return_but
     $(document).on("click",".order_return_but",function () {
-        var comf = confirm("是否返还？");
+        var comf = confirm("是否确认商品已返还？");
         if (comf == true){
             orderStatusUpdate($(this).attr("data-info"),4,"返还成功");
         }
@@ -1059,7 +1059,7 @@
 
             //返还按钮
             var returnButTd = $("<button></button>").addClass("btn btn-primary btn-sm order_return_but").attr("aria-hidden", "true")
-                .append($("<span></span>").addClass("glyphicon glyphicon-pencil")).append("返还").attr("data-info",item.orderId);
+                .append($("<span></span>").addClass("glyphicon glyphicon-pencil")).append("确认返还").attr("data-info",item.orderId);
 
             //完成订单
             var returnOverButTd = $("<button></button>").addClass("btn btn-danger btn-sm order_over_but").attr("aria-hidden", "true")

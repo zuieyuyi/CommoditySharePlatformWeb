@@ -44,10 +44,10 @@ public class OrderService implements IOrderService {
 
         for (Order order:orders){
             //订单状态为3，则时间到了要变为7
-            if (order.getOrderStatus() == 3){
+            if (order.getOrderStatus() == OrderStatusEnum.RENT_OUT.getStatusCode()){
                 Date now = new Date();
                 if (now.getTime() > order.getOrderEndRentTime().getTime()){
-                    order.setOrderStatus(7);
+                    order.setOrderStatus(OrderStatusEnum.NO_RETURN.getStatusCode());
                     updateOrder(order);
                 }
             }
