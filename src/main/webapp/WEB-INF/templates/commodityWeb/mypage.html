@@ -695,7 +695,7 @@
 
     /* 商品列表模块 */
     //发送请求获取那一页数据
-    function                                                                                                                                                                                                                                                                                                                                                                                                                                                                toCommodityPage(pn) {
+    function toCommodityPage(pn) {
         $.ajax({
             url: PROJECT_PATH + "/commodity/commodities",
             data: {"pn":pn,"userId":USERID},

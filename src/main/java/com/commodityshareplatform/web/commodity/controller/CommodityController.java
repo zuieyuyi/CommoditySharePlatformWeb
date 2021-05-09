@@ -130,16 +130,19 @@ public class CommodityController {
     @ResponseBody
     public Result<Commodity> addCommodity(Commodity commodity,HttpServletRequest request){
         String contextPath = request.getServletContext().getRealPath("/uploadFile");
+        logger.info("图片上传到的地址----"+contextPath);
         Date date = new Date();
         File imgPath = new File(contextPath + "/" + commodity.getCommodityUserId());
+        logger.info("源文件地址----" + contextPath + "/" + commodity.getCommodityUserId());
         File[] files = imgPath.listFiles();
-        if (files.length == 0){
-            return ResultUtils.error(-1,"请上传文件");
+        if (files == null || files.length == 0){
+            return ResultUtils.error(-1,"请上传图片");
         }
         //通过创建日期排序
         File img = files[files.length-1];
 
         File imgToDir = new File(imgPath.getPath() + "/" + date.getTime());//转移图片路径
+        logger.info("转移图片路径----" + imgPath.getPath() + "/" + date.getTime());
         File img2 =  new File(imgToDir.getPath() + "/" + img.getName());
 
         //创建文件目录
@@ -150,6 +153,7 @@ public class CommodityController {
         try {
             FileUtils.copyFile(img,img2);
             img.delete();
+            logger.info("图片添加成功");
         } catch (IOException e) {
             return ResultUtils.error(-1,"图片添加失败");
         }
@@ -173,20 +177,24 @@ public class CommodityController {
         //获取商品图片路径
         //默认web地址
         String contextPath = request.getServletContext().getRealPath("");
+        logger.info("默认web地址----"+contextPath);
         Commodity com = commodityService.selectCommodityById(commodity.getCommodityId());
         //图片与默认web地址的相对路径
         String commodityImgSrc = com.getCommodityImgSrc();
+        logger.info("图片与默认web地址的相对路径----"+commodityImgSrc);
         //原图
         File oldImg = new File(contextPath + "/" + commodityImgSrc);
+        logger.info("原图----" + contextPath + "/" + commodityImgSrc);
         //上传图片地址
         File imgPath = new File(contextPath + "/uploadFile/" + com.getCommodityUserId());
+        logger.info("上传图片地址----" + contextPath + "/uploadFile/" + com.getCommodityUserId());
         File[] files = imgPath.listFiles();
         if (files == null){
-//            return ResultUtils.error(-1,"请上传文件");
+            return ResultUtils.error(-1,"请上传文件");
         }else{
             //新图
             File newImg = files[files.length-1];;
-            if(newImg.exists()){
+            if(newImg.isFile()){
                 //删除旧图片
                 oldImg.delete();
                 //转移新图
@@ -291,7 +299,7 @@ public class CommodityController {
 //        String commodityId = request.getParameter("commodityId") == null?"":request.getParameter("commodityId");
         File dir = null;
         if (!StringUtils.isEmpty(userId)){
-            dir = new File(contextPath+"\\"+userId);
+            dir = new File(contextPath+"/"+userId);
             if (!dir.exists()){
                 dir.mkdirs();
 //                contextPath += "\\" + userId;
@@ -304,10 +312,12 @@ public class CommodityController {
                 }
             }
         }
+        logger.info("文件上传到----" + dir.getPath());
 
         String originalFilename = file.getOriginalFilename();
         // 生成文件新的名字
         String newFileName = UUID.randomUUID() + originalFilename;
+        logger.info("文件名为----" + newFileName);
         // 封装上传文件位置的全路径
         File targetFile = new File(dir, newFileName);
         file.transferTo(targetFile);
