@@ -7,7 +7,7 @@ body{
 	background-repeat: no-repeat;
 	background-size: 1920px;
 	background-attachment: fixed;
-	background-image: url('/CommoditySharePlatformWeb/static/img/indexbg.jpg');/* 修改背景图片 */
+	background-image: url('/CommoditySharePlatformWeb_war/static/img/indexbg.jpg');/* 修改背景图片 */
 }
 #bgbox{
 	width: 1920px;
