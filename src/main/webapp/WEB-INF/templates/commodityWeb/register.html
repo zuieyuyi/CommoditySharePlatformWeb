@@ -102,7 +102,7 @@
             alert("密码为空");
             return false;
         }
-        if (validateStr(pwd) && valiDateLength(pwd,6,20)){
+        if (validateStr(pwd) && !valiDateLength(pwd,6,20)){
             alert("密码必须包含数字字母并且长度为6-20");
             return false;
         }

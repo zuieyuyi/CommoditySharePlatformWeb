@@ -782,30 +782,31 @@
         var commodityPrice = $("#commodityPrice").val();
         // var commodityImgSrc = $("#commodityImg").val();
         var commodityQuality = $("#commodityQuality").val();
-
-        $.ajax({
-            url: PROJECT_PATH+"/commodity/commodity",
-            dataType: "json",
-            type: "POST",
-            data: {"commodityName":commodityName,
-                "commodityStatus":commodityStatus,
-                "commodityNum":commodityNum,
-                "commodityPrice":commodityPrice,
-                "commodityUserId":USERID,
-                "commodityQuality":commodityQuality},
-            success: function(result){
-                if (result.code == 10000){
-                    //关闭模态框
-                    $("#add_commodity_modal").modal("hide");
-                    //清空表单
-                    $("#commodityAdd")[0].reset();
-                    //刷新页面
-                    toCommodityPage(commoditycurrentNum);
-                }else{
-                    alert(result.msg);
+        if (validateCommodity(commodityName,commodityNum,commodityPrice,commodityQuality)){
+            $.ajax({
+                url: PROJECT_PATH+"/commodity/commodity",
+                dataType: "json",
+                type: "POST",
+                data: {"commodityName":commodityName,
+                    "commodityStatus":commodityStatus,
+                    "commodityNum":commodityNum,
+                    "commodityPrice":commodityPrice,
+                    "commodityUserId":USERID,
+                    "commodityQuality":commodityQuality},
+                success: function(result){
+                    if (result.code == 10000){
+                        //关闭模态框
+                        $("#add_commodity_modal").modal("hide");
+                        //清空表单
+                        $("#commodityAdd")[0].reset();
+                        //刷新页面
+                        toCommodityPage(commoditycurrentNum);
+                    }else{
+                        alert(result.msg);
+                    }
                 }
-            }
-        })
+            });
+        }
     }
     //修改商品请求
     function updateCommodity(){
@@ -816,33 +817,36 @@
         var commodityPrice = $("#editComPrice").val();
         // var commodityUserId = $("#editComUserId").val();
         var commodityQuality = $("#editComQuality").val();
-
-        $.ajax({
-            url: PROJECT_PATH+"/commodity/commodity",
-            dataType: "json",
-            data: {"_method":"PUT",
-                "commodityId":commodityId,
-                "commodityName":commodityName,
-                "commodityStatus":commodityStatus,
-                "commodityNum":commodityNum,
-                "commodityPrice":commodityPrice,
-                "commodityQuality":commodityQuality},
-            type: "POST",
-            success: function(result){
-                if (result.code == 10000){
-                    //关闭模态框
-                    $("#update_commodity_modal").modal("hide");
-                    //清空表单
-                    $("#commodityUpdate")[0].reset();
-                    //弹窗提示成功
-                    alert("修改成功");
-                    //刷新页面
-                    toCommodityPage(commoditycurrentNum);
-                }else{
-                    alert(result.msg);
+        if (validateCommodity(commodityName,commodityNum,commodityPrice,commodityQuality)) {
+            $.ajax({
+                url: PROJECT_PATH + "/commodity/commodity",
+                dataType: "json",
+                data: {
+                    "_method": "PUT",
+                    "commodityId": commodityId,
+                    "commodityName": commodityName,
+                    "commodityStatus": commodityStatus,
+                    "commodityNum": commodityNum,
+                    "commodityPrice": commodityPrice,
+                    "commodityQuality": commodityQuality
+                },
+                type: "POST",
+                success: function (result) {
+                    if (result.code == 10000) {
+                        //关闭模态框
+                        $("#update_commodity_modal").modal("hide");
+                        //清空表单
+                        $("#commodityUpdate")[0].reset();
+                        //弹窗提示成功
+                        alert("修改成功");
+                        //刷新页面
+                        toCommodityPage(commoditycurrentNum);
+                    } else {
+                        alert(result.msg);
+                    }
                 }
-            }
-        })
+            });
+        }
     }
     //删除商品请求
     function delCommodity(commodityId){
@@ -1391,6 +1395,34 @@
                 }
             }
         });
+    }
+
+    function validateCommodity(name,num,price,quality){
+        if (!valiDateLength(name,2,14)){
+            alert("用户名长度应在2-14之间");
+            return false;
+        }
+        if (num == null || num == undefined || num == ""){
+            alert("未设置商品数量");
+            return false;
+        }
+        if (isMyFloat(num)){
+            alert("请输入一个合法的商品数量");
+            return false;
+        }
+        if (parseInt(num)>100000||parseInt(num)<=0){
+            alert("商品数量不能超过100000或不能小于等于0");
+            return false;
+        }
+        if (parseFloat(price)>1000000||parseFloat(price)<=0){
+            alert("商品的价格不能大于1000000或小于等于0");
+            return false;
+        }
+        if (quality == null || quality == undefined || quality == ""){
+            alert("请输入商品质量");
+            return false;
+        }
+        return true;
     }
     /*]]>*/
 </script>
